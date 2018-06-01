@@ -48,11 +48,13 @@ def collect_tweets_for_user(user, passwordfile, exclude_retweets=False):
 
 def clean_tweet_text(tweet_text):
     tweet_text = tweet_text.encode('utf8')
-    result = str(tweet_text).replace('\n', '')
+    result = str(tweet_text).strip()
 
-    return result
+    return result[2:-1]
 
 if __name__ == '__main__':
+
+    #mine_everything_for_twitter_users.py [input_list_file] [password_file]
 
     OUTPUT_FOLDER = 'tweets/'
 
