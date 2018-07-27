@@ -27,7 +27,10 @@ def collect_tweets_for_user(user, passwordfile, exclude_retweets=False):
     while not no_tweets_received:
 
         try:
-            new_raw_tweets = twitter_connection.get_user_timeline(screen_name=user, count=200, page=page)
+            new_raw_tweets = twitter_connection.get_user_timeline(screen_name=user, 
+                                                            count=200, page=page, 
+                                                            exclude_replies=False,
+                                                            tweet_mode='extended')
         except TwythonError:
             print('Twython is sad :(')
             break
@@ -38,8 +41,10 @@ def collect_tweets_for_user(user, passwordfile, exclude_retweets=False):
 
             for raw_tweet in new_raw_tweets:
                 current_tweet = Tweet(raw_tweet['id'], raw_tweet['user']['screen_name'],
-                                      clean_tweet_text(raw_tweet['text']))
-                if (exclude_retweets and current_tweet.content[2:5] != 'RT ') or not exclude_retweets:
+                                      clean_tweet_text(raw_tweet['full_text']))
+                try:
+                    raw_tweet['retweeted_status']
+                except:
                     all_tweets.append(current_tweet)
 
         page += 1
@@ -48,9 +53,9 @@ def collect_tweets_for_user(user, passwordfile, exclude_retweets=False):
 
 def clean_tweet_text(tweet_text):
     tweet_text = tweet_text.encode('utf8')
-    result = str(tweet_text).strip()
+    result = str(tweet_text).strip().replace('\n',' | ')
 
-    return result[2:-1]
+    return result
 
 if __name__ == '__main__':
 
