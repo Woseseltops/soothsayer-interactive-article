@@ -1,4 +1,5 @@
 from sys import argv
+from os.path import isfile
 from twython import Twython, TwythonError
 
 class Tweet():
@@ -62,11 +63,15 @@ if __name__ == '__main__':
     #mine_everything_for_twitter_users.py [input_list_file] [password_file]
 
     OUTPUT_FOLDER = 'tweets/'
+    DONT_OVERWRITE = True
 
     for twitter_user in open(argv[1]):
         twitter_user = twitter_user.strip()
+        output_file_name = OUTPUT_FOLDER+twitter_user+'.txt'
 
-        print('downloading tweets for ',twitter_user)
+        if not(isfile(output_file_name)) or not(DONT_OVERWRITE):
 
-        #save every tweet found to a seperate line
-        open(OUTPUT_FOLDER+twitter_user+'.txt','w').write('\n'.join([tweet.content for tweet in collect_tweets_for_user(twitter_user.strip(),argv[2],exclude_retweets=True)]))
+            print('downloading tweets for ',twitter_user)
+
+            #save every tweet found to a seperate line
+            open(output_file_name,'w').write('\n'.join([tweet.content for tweet in collect_tweets_for_user(twitter_user.strip(),argv[2],exclude_retweets=True)]))
