@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Specific
+research/timbl_models*
+research/tweets*
+research/analyses*
