@@ -50,10 +50,66 @@ def get_instances_for_twitter_user(username):
 
 	for tweet_index, tweet in enumerate(open(TWEET_FOLDER+username+'.txt')):
 		total_tweets.append(tweet)
-		instances_for_this_tweet = tweet_to_instances(tweet,NR_OF_FEATURES,tweet_index,username)
+		instances_for_this_tweet = tweet_to_instances(tweet,NR_OF_FEATURES,username,tweet_index)
 		total_instances += instances_for_this_tweet
 
 	return total_instances
+
+def create_classifier_and_word_freq_list(train_instances,timbl_models_folder,train_users,test_user,tweet_index):
+
+	timbl_model_name = test_user+'.'+'_'.join(train_users)+'.'+str(tweet_index)
+	classifier = TimblClassifier(timbl_models_folder+timbl_model_name,'-a 0 -k 1 +vs')
+	word_frequencies = Counter()
+
+	for instance in train_instances:
+		if instance.author == test_user and instance.original_tweet_index == tweet_index:
+			continue
+
+		classifier.append( instance.features, instance.label)
+		word_frequencies[instance.label]+= 1
+
+	classifier.train()
+
+	return classifier,word_frequencies
+
+def predict_text_character_by_character(text,classifier,word_frequencies,nr_of_features,remember_nr_of_options):
+
+	predictions = []
+
+	text_so_far = ''
+	current_word = ''
+
+	for character in text:
+
+		#Administration about the text so far
+		text_so_far += character
+		current_word += character
+		words_so_far = text_so_far.split()
+
+		if character != ' ':
+			words_so_far = words_so_far[:-1]
+		else:
+			current_word = ''
+
+		#Prepare the the info for a classifier predction
+		features = words_so_far[-nr_of_features:]
+
+		while len(features) < nr_of_features:
+			features = ['_'] + features
+
+		#Do the classifier prediction
+		classlabel, distribution, distance = classifier.classify(features)
+		best_matching_words_from_context = pick_best_matching_words_from_dictionary(distribution,current_word,remember_nr_of_options)
+
+		#Extend info with regular frequency list material
+		if len(best_matching_words_from_context) < remember_nr_of_options:
+			best_matching_words_from_freqlist = pick_best_matching_words_from_dictionary(word_frequencies,current_word,remember_nr_of_options-len(best_matching_words_from_context))
+		else:
+			best_matching_words_from_freqlist = []		
+
+		predictions.append((best_matching_words_from_context,best_matching_words_from_freqlist))
+
+	return predictions
 
 def find_matching_model_files(training_file_folder,test_user,train_users):
 
@@ -82,8 +138,9 @@ def pick_best_matching_words_from_dictionary(distribution,target,n):
 
 if __name__ == '__main__':
 
-	INSTRUCTION_FILE = 'experiment_instr.txt'
+	INSTRUCTION_FILE = 'experiment2_instr.txt'
 	TIMBL_MODELS_FOLDER = 'timbl_models/'
+	ANALYSES_FOLDER = 'analyses/'
 	NR_OF_FEATURES = 3
 	REMEMBER_NR_OF_OPTIONS = 3
 
@@ -102,58 +159,15 @@ if __name__ == '__main__':
 		#Create train instances for this experiment
 		train_instances = list(chain([get_instances_for_twitter_user(train_user) for train_user in train_users]))[0]
 
+		#Create output file
+		output_file = open(ANALYSES_FOLDER+test_user+'.'+'_'.join(train_users),'w')
+
 		#Go through the tweets of the test user
 		for tweet_index, tweet in enumerate(open(TWEET_FOLDER+test_user+'.txt')):
 
 			#Train the model on all tweets except this one
-			timbl_model_name = test_user+'.'+'_'.join(train_users)+'.'+str(tweet_index)
-			classifier = TimblClassifier(TIMBL_MODELS_FOLDER+timbl_model_name,'-a 0 -k 1 +vs')
-			word_frequencies = Counter()
-
-			for instance in train_instances:
-				if instance.author == test_user and instance.original_tweet_index == tweet_index:
-					continue
-
-				classifier.append( instance.features, instance.label)
-				word_frequencies[instance.label]+= 1
-
-			classifier.train()
+			classifier, word_frequencies = create_classifier_and_word_freq_list(train_instances,TIMBL_MODELS_FOLDER,train_users,test_user,tweet_index)
 
 			#Here the prediction starts
-			tweet_so_far = ''
-			current_word = ''
-
-			for character in tweet:
-
-				#Administration about the tweet so far
-				tweet_so_far += character
-				current_word += character
-				words_so_far = tweet_so_far.split()
-
-				if character != ' ':
-					words_so_far = words_so_far[:-1]
-				else:
-					current_word = ''
-
-				#Prepare the the info for a classifier predction
-				features = words_so_far[-NR_OF_FEATURES:]
-
-				while len(features) < NR_OF_FEATURES:
-					features = ['_'] + features
-
-				#Do the classifier prediction
-				classlabel, distribution, distance = classifier.classify(features)
-				best_matching_words_from_context = pick_best_matching_words_from_dictionary(distribution,current_word,REMEMBER_NR_OF_OPTIONS)
-
-				#Extend info with regular frequency list material
-				if len(best_matching_words_from_context) < REMEMBER_NR_OF_OPTIONS:
-					best_matching_words_from_freqlist = pick_best_matching_words_from_dictionary(word_frequencies,current_word,REMEMBER_NR_OF_OPTIONS-len(best_matching_words_from_context))
-				else:
-					best_matching_words_from_freqlist = []
-
-				print(tweet_so_far,'|',best_matching_words_from_context,best_matching_words_from_freqlist)
-
-			#result = open(OUTPUT_FOLDER+twitter_user+'.'+analyzer+'.txt','w')
-		break
-
-#Nog toevoegen: nearest neighbours ook opslaan?
+			predictions = predict_text_character_by_character(tweet,classifier,word_frequencies,NR_OF_FEATURES,REMEMBER_NR_OF_OPTIONS)
+			output_file.write(dumps(predictions)+'\n')
