@@ -1,4 +1,0 @@
-1	0	0	financial	financial { financial 1.00000 }        0.0000000000000
-0	1	0	furniture	furniture { furniture 1.00000 }        0.0000000000000
-0	0	1	geograpic	geographic { geographic 1.00000 }        0.0000000000000
-1	1	0	geograpic	financial { financial 1.00000, furniture 1.00000 }        1.0000000000000

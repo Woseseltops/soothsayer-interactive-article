@@ -1,6 +1,6 @@
 from timbl import TimblClassifier
 
-classifier = TimblClassifier('test','-a 0 -k 1')
+classifier = TimblClassifier('test','-a 0 -k 1 +vk')
 
 classifier.append( ('dit','is','een'), 'idee')
 classifier.append( ('dat','was','geen'), 'doen')
