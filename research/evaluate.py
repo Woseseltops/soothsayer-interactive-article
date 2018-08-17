@@ -4,9 +4,11 @@ from json import loads, JSONDecodeError
 ANALYSES_FOLDER = 'analyses/'
 TWEETS_FOLDER = 'tweets/'
 
+scores_per_test_user = {}
+
 for filename in listdir(ANALYSES_FOLDER):
 
-	username = filename.split('.')[0]
+	username, train_users = filename.split('.')
 	original_tweets = open(TWEETS_FOLDER+username+'.txt').readlines()
 
 	correct = 0
@@ -56,5 +58,25 @@ for filename in listdir(ANALYSES_FOLDER):
 
 	try:
 		print(filename,correct/total)
+
+		if username in scores_per_test_user.keys():
+			scores_per_test_user[username].append((train_users,correct/total))
+		else:
+			scores_per_test_user[username] = [(train_users,correct/total)]
+
 	except ZeroDivisionError:
 		print(filename,'problem')
+
+print()
+
+for test_user, scores in scores_per_test_user.items():
+
+	print(test_user)
+	print('=========')
+
+	scores = sorted(scores,key=lambda x: x[1])
+
+	for train_users, score in scores:
+		print(train_users,score)
+
+	print()
