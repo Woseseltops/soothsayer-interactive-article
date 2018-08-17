@@ -1,0 +1,326 @@
+<html>
+<body>
+	<style type="text/css">
+		.visualization
+		{
+			font-family: 'Montserrat', sans-serif;
+		    width: 600px;
+    		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);						
+		}
+
+		.visualization_section
+		{
+			padding: 30px;
+		}
+
+		.profile_picture
+		{
+			border-radius: 50%;
+			width: 100px;
+		}
+
+		.user_select
+		{
+			filter: grayscale(100%);
+			cursor: pointer;				
+		}
+
+		.user_select:hover
+		{
+			filter: grayscale(0%);
+		}
+
+		img.selected
+		{
+			filter: grayscale(0%);
+		}
+
+		a.selected
+		{
+			color: hsl(203, 43%, 76%);
+		}
+
+		.visualization_section:nth-child(odd)
+		{
+			background-color: hsl(0, 0%, 96%);
+		}
+
+		.section_title
+		{
+			text-transform: uppercase;				
+		}		
+
+		.bar
+		{
+			background-color: hsl(203, 43%, 76%);
+			height: 16px;
+			border-radius: 8px;
+		}
+
+		.tweet_select
+		{
+			font-size: 40px;
+			cursor: pointer;
+		}
+
+		.predicted_tweet_percentage
+		{
+			color: hsl(203, 43%, 76%);
+			margin: auto;
+			font-size: 60px;
+			width: 160px;
+			text-align: center;
+		}
+	</style>
+
+
+	<div class="visualization">
+
+		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+		<script type="text/javascript">
+
+		var scores = {
+					"barackobama":
+						[["barackobama",10],["rihanna",20],["katyperry",30]],
+					"jtimberlake":
+						[["barackobama",20],["rihanna",20],["katyperry",20]],
+					"rihanna":
+						[["barackobama",30],["rihanna",50],["katyperry",20]],
+					"katyperry":
+						[["barackobama",10],["rihanna",20],["katyperry",30]]	
+					}
+
+		var tweets = {
+						"barackobama":
+						[
+							{
+								"id":"1234",
+								"predicted_by":
+								{
+									"barackobama":
+									{
+										"text": "abcd",
+										"score": 50
+									},
+									"rihanna":
+									{
+										"text": "abcd",
+										"score": 40
+									},
+									"katyperry":
+									{
+										"text": "abcd",
+										"score": 30
+									}											
+								}
+							},
+							{
+								"id":"1234",
+								"predicted_by":
+								{
+									"barackobama":
+									{
+										"text": "abcd",
+										"score": 10
+									},
+									"rihanna":
+									{
+										"text": "abcd",
+										"score": 40
+									},
+									"katyperry":
+									{
+										"text": "abcd",
+										"score": 30
+									}											
+								}
+							},
+							{
+								"id":"1234",
+								"predicted_by":
+								{
+									"barackobama":
+									{
+										"text": "abcd",
+										"score": 70
+									},
+									"rihanna":
+									{
+										"text": "abcd",
+										"score": 40
+									},
+									"katyperry":
+									{
+										"text": "abcd",
+										"score": 30
+									}											
+								}
+							}													
+						],
+						"jtimberlake":
+						[
+							{
+								"id":"1234",
+								"predicted_by":
+								{
+									"barackobama":
+									{
+										"text": "abcd",
+										"score": 4
+									},
+									"rihanna":
+									{
+										"text": "abcd",
+										"score": 4
+									},
+									"katyperry":
+									{
+										"text": "abcd",
+										"score": 4
+									}											
+								}
+							}
+						]								
+					}
+
+		var selected_user = 'barackobama'
+		var selected_model = 'barackobama'
+		var selected_tweet_index = 0
+
+		$(document).ready(function()
+		{
+			$('.user_select').click(function()
+			{
+				$('.user_select').each(function()
+				{
+					$(this).removeClass('selected');
+				});
+
+				$(this).addClass('selected');
+
+				selected_user = $(this).attr('user')
+
+				var bar_length_multiplier = 3;
+				var score_per_language_model = scores[$(this).attr('user')];
+				var c = 0;
+
+				$('.predictor_name').each(function()
+				{
+					$(this).html('@'+score_per_language_model[c][0]);
+					c++;
+				});
+
+				c = 0
+				$('.predictor_score').each(function()
+				{
+					$(this).html(score_per_language_model[c][1]+'%');
+					c++;
+				});
+
+				c = 0
+				$('.predictor_picture').each(function()
+				{
+					$(this).attr('src','img/'+score_per_language_model[c][0]+'.jpg');
+					c++;
+				});
+
+				c = 0
+				$('.bar').each(function()
+				{
+					$(this).css('width',bar_length_multiplier*score_per_language_model[c][1]+'px');
+					c++;
+				});
+
+			});
+
+			$('.tweet_select').click(function()
+			{
+				$('.tweet_select').each(function()
+				{
+					$(this).removeClass('selected');
+				});
+
+				$(this).addClass('selected');
+
+				var tweet_info = tweets[selected_user][$(this).attr('tweet_index')-1]
+
+				$('.predicted_tweet_percentage').html(tweet_info['predicted_by']['barackobama']['score']+'%')
+				$('.predicted_tweet').html(tweet_info['predicted_by']['barackobama']['text'])
+			});
+
+		});
+		</script>
+
+		<div class="visualization_section">
+			<div class="section_title">
+				Twitter user
+			</div>
+			<img class="user_select profile_picture selected" user="barackobama" src="img/barackobama.jpg">
+			<img class="user_select profile_picture" user="jtimberlake" src="img/jtimberlake.jpg">
+			<img class="user_select profile_picture" user="rihanna" src="img/rihanna.jpg">
+			<img class="user_select profile_picture" user="katyperry" src="img/katyperry.jpg">
+		</div>
+		<div class="visualization_section">
+			<div class="section_title">
+				Language model (sorted by accuracy for this user)
+			</div>
+
+			<table>
+
+				<tr>
+					<td>
+						<img class="predictor_picture profile_picture model_select selected" src="">
+					</td>					
+					<td>
+						<div class="predictor_name"></div>
+						<div class="bar"></div>
+						<div class="predictor_score"></div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<img class="predictor_picture profile_picture model_select selected" src="">
+					</td>					
+					<td>
+						<div class="predictor_name"></div>
+						<div class="bar"></div>
+						<div class="predictor_score"></div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<img class="predictor_picture profile_picture model_select selected" src="">
+					</td>					
+					<td>
+						<div class="predictor_name"></div>
+						<div class="bar"></div>
+						<div class="predictor_score"></div>
+					</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="visualization_section">
+			<div class="section_title">
+				Example tweet
+			</div>
+
+			<a class="tweet_select selected" tweet_index="1">1</a>
+			<a class="tweet_select" tweet_index="2">2</a>
+			<a class="tweet_select" tweet_index="3">3</a>
+			<a class="tweet_select" tweet_index="4">4</a>
+			<a class="tweet_select" tweet_index="5">5</a>
+
+		</div>
+		<div class="visualization_section">
+			<div class='predicted_tweet_percentage'></div>
+			<div class="section_title">of the characters in this tweet were correctly predicted by this model</div>
+			<div class='predicted_tweet'></div>
+		</div>
+	</div>
+</body>
+</html>
