@@ -1,5 +1,6 @@
 <html>
 <body>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<style type="text/css">
 		.visualization
 		{
@@ -17,15 +18,16 @@
 		{
 			border-radius: 50%;
 			width: 100px;
+			margin: 10px;
 		}
 
-		.user_select
+		.user_select, .model_select
 		{
 			filter: grayscale(100%);
 			cursor: pointer;				
 		}
 
-		.user_select:hover
+		.user_select:hover, .model_select:hover
 		{
 			filter: grayscale(0%);
 		}
@@ -37,7 +39,7 @@
 
 		a.selected
 		{
-			color: hsl(203, 43%, 76%);
+			color: hsl(200, 80%, 53%);
 		}
 
 		.visualization_section:nth-child(odd)
@@ -47,25 +49,52 @@
 
 		.section_title
 		{
-			text-transform: uppercase;				
+			text-transform: uppercase;	
+			color: hsla(0, 0%, 0%, 0.4);	
+			margin: 15px;		
+			font-weight: 600;
 		}		
+
+		.percentage_explanation
+		{
+			text-align: center;			
+			text-transform: uppercase;	
+			color: hsla(0, 0%, 0%, 0.4);
+		}
+
+		.predictor_name
+		{
+			color: hsla(0, 0%, 0%, 0.4);
+			font-size: 14px;	
+			margin-bottom: 5px;		
+		}
 
 		.bar
 		{
 			background-color: hsl(203, 43%, 76%);
-			height: 16px;
-			border-radius: 8px;
+			height: 20px;
+			border-radius: 10px;
+			float: left;
+			margin-right: 10px;
+
+		}
+
+		.bar_column
+		{
+			width: 220px;
 		}
 
 		.tweet_select
 		{
 			font-size: 40px;
 			cursor: pointer;
+			margin:15px;
+			color: hsla(0, 0%, 0%, 0.2);				
 		}
 
 		.predicted_tweet_percentage
 		{
-			color: hsl(203, 43%, 76%);
+			color: hsl(200, 80%, 53%);
 			margin: auto;
 			font-size: 60px;
 			width: 160px;
@@ -76,115 +105,12 @@
 
 	<div class="visualization">
 
-		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+		<script src="scores_per_language_model.js" type="text/javascript"></script>
+		<script src="info_per_tweet.js" type="text/javascript"></script>
 		<script type="text/javascript">
-
-		var scores = {
-					"barackobama":
-						[["barackobama",10],["rihanna",20],["katyperry",30]],
-					"jtimberlake":
-						[["barackobama",20],["rihanna",20],["katyperry",20]],
-					"rihanna":
-						[["barackobama",30],["rihanna",50],["katyperry",20]],
-					"katyperry":
-						[["barackobama",10],["rihanna",20],["katyperry",30]]	
-					}
-
-		var tweets = {
-						"barackobama":
-						[
-							{
-								"id":"1234",
-								"predicted_by":
-								{
-									"barackobama":
-									{
-										"text": "abcd",
-										"score": 50
-									},
-									"rihanna":
-									{
-										"text": "abcd",
-										"score": 40
-									},
-									"katyperry":
-									{
-										"text": "abcd",
-										"score": 30
-									}											
-								}
-							},
-							{
-								"id":"1234",
-								"predicted_by":
-								{
-									"barackobama":
-									{
-										"text": "abcd",
-										"score": 10
-									},
-									"rihanna":
-									{
-										"text": "abcd",
-										"score": 40
-									},
-									"katyperry":
-									{
-										"text": "abcd",
-										"score": 30
-									}											
-								}
-							},
-							{
-								"id":"1234",
-								"predicted_by":
-								{
-									"barackobama":
-									{
-										"text": "abcd",
-										"score": 70
-									},
-									"rihanna":
-									{
-										"text": "abcd",
-										"score": 40
-									},
-									"katyperry":
-									{
-										"text": "abcd",
-										"score": 30
-									}											
-								}
-							}													
-						],
-						"jtimberlake":
-						[
-							{
-								"id":"1234",
-								"predicted_by":
-								{
-									"barackobama":
-									{
-										"text": "abcd",
-										"score": 4
-									},
-									"rihanna":
-									{
-										"text": "abcd",
-										"score": 4
-									},
-									"katyperry":
-									{
-										"text": "abcd",
-										"score": 4
-									}											
-								}
-							}
-						]								
-					}
-
+	
 		var selected_user = 'barackobama'
 		var selected_model = 'barackobama'
 		var selected_tweet_index = 0
@@ -201,38 +127,21 @@
 				$(this).addClass('selected');
 
 				selected_user = $(this).attr('user')
+				updateExampleTweet(selected_user,selected_model,selected_tweet_index);
+				updateModelScores(selected_user)				
+			});
 
-				var bar_length_multiplier = 3;
-				var score_per_language_model = scores[$(this).attr('user')];
-				var c = 0;
-
-				$('.predictor_name').each(function()
+			$('.model_select').click(function()
+			{
+				$('.model_select').each(function()
 				{
-					$(this).html('@'+score_per_language_model[c][0]);
-					c++;
+					$(this).removeClass('selected');
 				});
 
-				c = 0
-				$('.predictor_score').each(function()
-				{
-					$(this).html(score_per_language_model[c][1]+'%');
-					c++;
-				});
+				$(this).addClass('selected');
 
-				c = 0
-				$('.predictor_picture').each(function()
-				{
-					$(this).attr('src','img/'+score_per_language_model[c][0]+'.jpg');
-					c++;
-				});
-
-				c = 0
-				$('.bar').each(function()
-				{
-					$(this).css('width',bar_length_multiplier*score_per_language_model[c][1]+'px');
-					c++;
-				});
-
+				selected_model = $(this).attr('model')
+				updateExampleTweet(selected_user,selected_model,selected_tweet_index);
 			});
 
 			$('.tweet_select').click(function()
@@ -244,13 +153,58 @@
 
 				$(this).addClass('selected');
 
-				var tweet_info = tweets[selected_user][$(this).attr('tweet_index')-1]
-
-				$('.predicted_tweet_percentage').html(tweet_info['predicted_by']['barackobama']['score']+'%')
-				$('.predicted_tweet').html(tweet_info['predicted_by']['barackobama']['text'])
+				selected_tweet_index = $(this).attr('tweet_index')-1;
+				updateExampleTweet(selected_user,selected_model,selected_tweet_index);
 			});
 
+			updateModelScores('barackobama');
+			updateExampleTweet('barackobama','barackobama',0);
 		});
+
+		function updateModelScores(user)
+		{
+			var bar_length_multiplier = 3;
+			var score_per_language_model = scores[user];
+			var c = 0;
+
+			$('.predictor_name').each(function()
+			{
+				$(this).html('@'+score_per_language_model[c][0]);
+				c++;
+			});
+
+			c = 0
+			$('.predictor_score').each(function()
+			{
+				$(this).html(score_per_language_model[c][1]+'%');
+				c++;
+			});
+
+			c = 0
+			$('.predictor_picture').each(function()
+			{
+				$(this).attr('src','img/'+score_per_language_model[c][0]+'.jpg');
+				$(this).attr('model',''+score_per_language_model[c][0]);
+				c++;
+			});
+
+			c = 0
+			$('.bar').each(function()
+			{
+				$(this).css('width',bar_length_multiplier*score_per_language_model[c][1]+'px');
+				c++;
+			});			
+		}
+
+		function updateExampleTweet(user,model,tweet_index)
+		{
+			var tweet_info = tweets[user][tweet_index];
+
+			$('.predicted_tweet_percentage').html(tweet_info['predicted_by'][model]['score']+'%')
+			$('.predicted_tweet').html(tweet_info['predicted_by'][model]['text'])
+			$('.embedded_tweet_area').html('<blockquote class="twitter-tweet" data-conversation="none" data-lang="en-gb"><p lang="en" dir="ltr"><a id="embedded_tweet" href="https://twitter.com/'+user+'/status/'+tweet_info['id']+'"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><//script>')
+		}
+
 		</script>
 
 		<div class="visualization_section">
@@ -273,7 +227,7 @@
 					<td>
 						<img class="predictor_picture profile_picture model_select selected" src="">
 					</td>					
-					<td>
+					<td class="bar_column">
 						<div class="predictor_name"></div>
 						<div class="bar"></div>
 						<div class="predictor_score"></div>
@@ -282,9 +236,9 @@
 
 				<tr>
 					<td>
-						<img class="predictor_picture profile_picture model_select selected" src="">
+						<img class="predictor_picture profile_picture model_select" src="">
 					</td>					
-					<td>
+					<td class="bar_column">
 						<div class="predictor_name"></div>
 						<div class="bar"></div>
 						<div class="predictor_score"></div>
@@ -293,9 +247,9 @@
 
 				<tr>
 					<td>
-						<img class="predictor_picture profile_picture model_select selected" src="">
+						<img class="predictor_picture profile_picture model_select" src="">
 					</td>					
-					<td>
+					<td class="bar_column">
 						<div class="predictor_name"></div>
 						<div class="bar"></div>
 						<div class="predictor_score"></div>
@@ -315,10 +269,12 @@
 			<a class="tweet_select" tweet_index="4">4</a>
 			<a class="tweet_select" tweet_index="5">5</a>
 
+			<div class="embedded_tweet_area"></div>
+
 		</div>
 		<div class="visualization_section">
 			<div class='predicted_tweet_percentage'></div>
-			<div class="section_title">of the characters in this tweet were correctly predicted by this model</div>
+			<div class="percentage_explanation">of the characters in this tweet were correctly predicted by this model</div>
 			<div class='predicted_tweet'></div>
 		</div>
 	</div>
