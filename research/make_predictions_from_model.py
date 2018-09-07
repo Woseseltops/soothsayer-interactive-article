@@ -138,7 +138,7 @@ def pick_best_matching_words_from_dictionary(distribution,target,n):
 
 if __name__ == '__main__':
 
-	INSTRUCTION_FILE = 'experiment2_instr.txt'
+	INSTRUCTION_FILE = 'experiment3_instr.txt'
 	TIMBL_MODELS_FOLDER = 'timbl_models/'
 	ANALYSES_FOLDER = 'analyses/'
 	NR_OF_FEATURES = 3
