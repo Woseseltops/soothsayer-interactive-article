@@ -1,10 +1,1 @@
-var scores = {
-			"barackobama":
-				[["barackobama",10],["rihanna",20],["katyperry",30]],
-			"jtimberlake":
-				[["barackobama",20],["rihanna",20],["katyperry",20]],
-			"rihanna":
-				[["barackobama",30],["rihanna",50],["katyperry",20]],
-			"katyperry":
-				[["barackobama",10],["rihanna",20],["katyperry",30]]	
-			}
+var scores = {"barackobama": [["barackobama", 59], ["jtimberlake", 32], ["kimkardashian", 27], ["ladygaga", 33]], "jtimberlake": [["barackobama", 25], ["jtimberlake", 45], ["kimkardashian", 23], ["ladygaga", 28]], "kimkardashian": [["barackobama", 33], ["jtimberlake", 37], ["kimkardashian", 53], ["ladygaga", 37]], "ladygaga": [["barackobama", 29], ["jtimberlake", 32], ["kimkardashian", 29], ["ladygaga", 44]]}
