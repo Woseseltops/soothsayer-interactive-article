@@ -52,7 +52,7 @@
 			text-transform: uppercase;	
 			color: hsla(0, 0%, 0%, 0.4);	
 			margin: 15px;		
-			font-weight: 600;
+			font-size: 14px;
 		}		
 
 		.percentage_explanation
@@ -67,6 +67,12 @@
 			color: hsla(0, 0%, 0%, 0.4);
 			font-size: 14px;	
 			margin-bottom: 5px;		
+		}
+
+		.predicted_text
+		{
+			font-size: 20px;
+			margin-top: 40px;			
 		}
 
 		.bar
@@ -100,6 +106,85 @@
 			width: 160px;
 			text-align: center;
 		}
+
+		.slider_area
+		{
+			width: 440px;
+			margin: auto;
+		}
+
+		#progress_slider
+		{
+			width: 400px;
+			float: left;
+		}
+
+		#progress_slider::-webkit-slider-thumb 
+		{
+		    -webkit-appearance: none;
+		    appearance: none;
+		    background-color: hsl(203, 43%, 76%);
+		    border: none;
+		    cursor: pointer;
+		    width: 20px;
+		    height: 20px;
+		    border-radius: 20px;
+		}
+
+		#progress_slider::-moz-range-thumb 
+		{
+		    -webkit-appearance: none;
+		    appearance: none;
+		    background-color: hsl(203, 43%, 76%);
+		    border: none;
+		    cursor: pointer;
+		    width: 20px;
+		    height: 20px;
+		    border-radius: 20px;
+		}	
+
+		#progress_slider::-webkit-slider-runnable-track 
+		{
+			background-color: hsla(0,0%,0%,0.05);
+			border-radius: 10px;
+			height: 10px;
+		}
+
+		#progress_slider::-moz-range-track 
+		{
+			background-color: hsla(0,0%,0%,0.05);
+			border-radius: 10px;
+			height: 10px;
+		}
+			
+		.arrow_left, .arrow_right
+		{
+		  width: 0; 
+		  height: 0; 
+		  border-top: 10px solid transparent;
+		  border-bottom: 10px solid transparent;
+		  cursor: pointer;
+		}
+
+		.arrow_right 
+		{
+		  
+		  border-left: 10px solid hsl(203, 43%, 76%);
+		  margin-left: 430px;		  
+		}
+
+		.arrow_left 
+		{
+		  
+		  border-right:10px solid hsl(203, 43%, 76%); 
+		  float: left;
+		}	
+
+		.correct_char
+		{
+			color: hsl(200, 80%, 53%);			
+		}		
+
 	</style>
 
 
@@ -108,7 +193,7 @@
 
 	<div class="visualization" id="eval_vis">
 		<script src="js/scores_per_language_model.js" type="text/javascript"></script>
-		<script src="js/info_per_tweet.js" type="text/javascript"></script>
+		<script src="js/scores_per_tweet.js" type="text/javascript"></script>
 		<script type="text/javascript">
 	
 		var selected_user = 'barackobama'
@@ -142,6 +227,8 @@
 
 				selected_model = $(this).attr('model')
 				updateExampleTweet(selected_user,selected_model,selected_tweet_index);
+
+				$('#percentage_explanation').html('of the characters in this tweet were correctly predicted by the language model of @'+selected_model)
 			});
 
 			$('#eval_vis .tweet_select').click(function()
@@ -198,7 +285,7 @@
 
 		function updateExampleTweet(user,model,tweet_index)
 		{
-			var tweet_info = tweets[user][tweet_index];
+			var tweet_info = scores_per_tweet[user][tweet_index];
 
 			$('#eval_vis .predicted_tweet_percentage').html(tweet_info['predicted_by'][model]['score']+'%')
 			$('#eval_vis .predicted_tweet').html(tweet_info['predicted_by'][model]['text'])
@@ -213,12 +300,12 @@
 			</div>
 			<img class="user_select profile_picture selected" user="barackobama" src="img/barackobama.jpg">
 			<img class="user_select profile_picture" user="jtimberlake" src="img/jtimberlake.jpg">
-			<img class="user_select profile_picture" user="rihanna" src="img/rihanna.jpg">
-			<img class="user_select profile_picture" user="katyperry" src="img/katyperry.jpg">
+			<img class="user_select profile_picture" user="kimkardashian" src="img/kimkardashian.jpg">
+			<img class="user_select profile_picture" user="ladygaga" src="img/ladygaga.jpg">
 		</div>
 		<div class="visualization_section">
 			<div class="section_title">
-				Language model (sorted by accuracy for this user)
+				Language model
 			</div>
 
 			<table>
@@ -226,6 +313,17 @@
 				<tr>
 					<td>
 						<img class="predictor_picture profile_picture model_select selected" src="">
+					</td>					
+					<td class="bar_column">
+						<div class="predictor_name"></div>
+						<div class="bar"></div>
+						<div class="predictor_score"></div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<img class="predictor_picture profile_picture model_select" src="">
 					</td>					
 					<td class="bar_column">
 						<div class="predictor_name"></div>
@@ -274,7 +372,7 @@
 		</div>
 		<div class="visualization_section">
 			<div class='predicted_tweet_percentage'></div>
-			<div class="percentage_explanation">of the characters in this tweet were correctly predicted by this model</div>
+			<div class="percentage_explanation" id="percentage_explanation">of the characters in this tweet were correctly predicted by the language model of @barackobama</div>
 			<div class='predicted_tweet'></div>
 		</div>
 	</div>
@@ -287,7 +385,7 @@
 		<script>
 			var selected_user = 'barackobama';
 			var selected_tweet_index = 0;
-			var progress = 14;
+			var progress = 1;
 
 			function updateProgressSlider()
 			{
@@ -303,7 +401,19 @@
 				$('#models_vis .predicted_text').html(progress_text+'|');
 			}
 
-			//predictions_for_this_tweet = predictions_per_language_model[selected_user];
+			function updatePredictions()
+			{
+				predictions_for_this_user = predictions_per_language_model[selected_user]
+				var models = ['barackobama','jtimberlake','kimkardashian','ladygaga'];
+
+				for (model_index in models)
+				{
+					var model = models[model_index]
+					var predictions = predictions_for_this_user[model][selected_tweet_index][progress-1];				
+					$('#'+model+'_predictions').html(predictions.join(', '))
+				}
+
+			}
 
 			$(document).ready(function()
 			{
@@ -320,6 +430,7 @@
 
 					updateProgressSlider();
 					updateTweetProgress();
+					updatePredictions();
 				});
 
 				$('#models_vis .tweet_select').click(function()
@@ -335,13 +446,43 @@
 
 					updateProgressSlider();
 					updateTweetProgress();
+					updatePredictions();
 				});
 
 				$('#models_vis #progress_slider').on('input',function()
 				{
 					progress = $(this).val();
 					updateTweetProgress();
+					updatePredictions();
 				});
+
+				$('.arrow_left').click(function()
+				{
+					if (progress > 1)
+					{
+						progress -= 1;
+					}
+					
+					$('#progress_slider').val(progress);
+					updateTweetProgress();
+					updatePredictions();
+				});
+
+				$('.arrow_right').click(function()
+				{
+					if (progress < example_tweets[selected_user][selected_tweet_index].length)
+					{
+						progress += 1;
+					}
+					
+					$('#progress_slider').val(progress);
+					updateTweetProgress();
+					updatePredictions();
+				});
+
+				updateProgressSlider();
+				updateTweetProgress();
+				updatePredictions();			
 			});
 
 		</script>
@@ -352,8 +493,8 @@
 			</div>
 			<img class="user_select profile_picture selected" user="barackobama" src="img/barackobama.jpg">
 			<img class="user_select profile_picture" user="jtimberlake" src="img/jtimberlake.jpg">
-			<img class="user_select profile_picture" user="rihanna" src="img/rihanna.jpg">
-			<img class="user_select profile_picture" user="katyperry" src="img/katyperry.jpg">
+			<img class="user_select profile_picture" user="kimkardashian" src="img/kimkardashian.jpg">
+			<img class="user_select profile_picture" user="ladygaga" src="img/ladygaga.jpg">
 
 		</div>
 
@@ -375,7 +516,9 @@
 			<div class="section_title">
 				Slide back and forth
 			</div>
-			<input type="range" min="1" max="10" value="2" class="slider" id="progress_slider">
+			<div class="slider_area">
+				<div class="arrow_left"></div><input type="range" min="1" max="10" value="2" class="slider" id="progress_slider"></input><div class="arrow_right"></div>
+			</div>
 
 			<p class="predicted_text">This is|</p>
 		</div>
@@ -387,13 +530,16 @@
 
 			<table>
 				<tr>
-					<td><img class="predictor_picture profile_picture model_select selected" src=""></td><td></td>
+					<td><img class="predictor_picture profile_picture" src="img/barackobama.jpg"></td><td><div class="predictor_name">@barackobama</div><div id="barackobama_predictions"></div></td>
 				</tr>
 				<tr>
-					<td><img class="predictor_picture profile_picture model_select selected" src=""></td><td></td>
+					<td><img class="predictor_picture profile_picture" src="img/jtimberlake.jpg"></td><td><div class="predictor_name">@jtimberlake</div><div id="jtimberlake_predictions"></div></td>
 				</tr>
 				<tr>
-					<td><img class="predictor_picture profile_picture model_select selected" src=""></td><td></td>
+					<td><img class="predictor_picture profile_picture" src="img/kimkardashian.jpg"></td><td><div class="predictor_name">@kimkardashian</div><div id="kimkardashian_predictions"></div></td>
+				</tr>
+				<tr>
+					<td><img class="predictor_picture profile_picture" src="img/ladygaga.jpg"></td><td><div class="predictor_name">@ladygaga</div><div id="ladygaga_predictions"></div></td>
 				</tr>
 			</table>
 		</div>
