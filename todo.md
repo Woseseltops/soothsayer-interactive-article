@@ -1,7 +1,7 @@
 Todo
 ----
-Make clearer which language model is selected by color
-Bug in de slider 
+Pick tweets
+* Ladygaga heeft een hele berg vrienden die goed presteren... welke kies ik?
 
 Backlog
 -------

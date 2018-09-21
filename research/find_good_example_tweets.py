@@ -1,8 +1,8 @@
 from os import listdir
 from json import loads, JSONDecodeError
 
-USER = 'jtimberlake'
-FRIENDS = ['THETNKIDS', 'Pharrell', 'AnnaKendrick47']
+USER = 'ladygaga'
+FRIENDS = ['ladygaga','sarahtanno', 'itstonybennett']
 
 ANALYSES_FOLDER = 'analyses/'
 TWEETS_FOLDER = 'tweets/'
@@ -14,7 +14,7 @@ for filename in listdir(ANALYSES_FOLDER):
 
 	username, model = filename.split('.')
 
-	if username != USER or '_' in model or username == model:
+	if username != USER or '_' in model:
 		continue
 
 	original_tweets = open(TWEETS_FOLDER+username+'.txt').readlines()
@@ -66,7 +66,10 @@ for filename in listdir(ANALYSES_FOLDER):
 				if predicted_character != None and character == predicted_character:
 					correct += 1
 
-		tweet_scores_per_model[model].append(correct/total)
+		try:
+			tweet_scores_per_model[model].append(correct/total)
+		except ZeroDivisionError:
+			tweet_scores_per_model[model].append(0)
 
 all_tweet_info = []
 
@@ -87,6 +90,9 @@ for n,tweet in enumerate(all_tweets):
 all_tweet_info = sorted(all_tweet_info, key = lambda x: x['cumulative_friend_rank'], reverse=True)
 
 for tweet_info in all_tweet_info:
+
+	if 'http' in tweet_info['content'] or 'President Obama' in tweet_info['content']:
+		continue
 
 	print(tweet_info['content'])
 	print(tweet_info['scores'])
