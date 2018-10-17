@@ -1,7 +1,10 @@
 Todo
 ----
-Pick tweets
-* Ladygaga heeft een hele berg vrienden die goed presteren... welke kies ik?
+Bug: no visible tweets
+
+Have the general outline visible
+* texts in between
+* 3x social visualization
 
 Backlog
 -------

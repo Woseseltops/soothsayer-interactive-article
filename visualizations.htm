@@ -412,7 +412,11 @@
 					var predictions = predictions_for_this_user[model][selected_tweet_index][progress-1];				
 					$('#'+model+'_predictions').html(predictions.join(', '))
 				}
+			}
 
+			function updateEmbeddedTweet()
+			{
+				$('#models_vis .embedded_tweet_area').html('<blockquote class="twitter-tweet" data-conversation="none" data-lang="en-gb"><p lang="en" dir="ltr"><a id="embedded_tweet" href="https://twitter.com/'+selected_user+'/status/'+scores_per_tweet[selected_user][selected_tweet_index]['id']+'"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><//script>')
 			}
 
 			$(document).ready(function()
@@ -431,6 +435,7 @@
 					updateProgressSlider();
 					updateTweetProgress();
 					updatePredictions();
+					updateEmbeddedTweet();
 				});
 
 				$('#models_vis .tweet_select').click(function()
@@ -447,6 +452,7 @@
 					updateProgressSlider();
 					updateTweetProgress();
 					updatePredictions();
+					updateEmbeddedTweet();
 				});
 
 				$('#models_vis #progress_slider').on('input',function()
@@ -482,7 +488,8 @@
 
 				updateProgressSlider();
 				updateTweetProgress();
-				updatePredictions();			
+				updatePredictions();	
+				updateEmbeddedTweet();		
 			});
 
 		</script>

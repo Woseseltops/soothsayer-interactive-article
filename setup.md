@@ -16,6 +16,7 @@ Interaction #1: explain the prediction engine
 * To decide: if multiple contexts lead to the same prediction, do we show them all?
 
 
+
 Language models
 ===============
 * This whole idea is a very simple kind of statistical language model. 
@@ -44,6 +45,7 @@ Interaction #3: explain eval
 * Show y different twitter users the users can pick from
 * When selecting, you see the scores for a number of ranked language models
 * There is also a visualization (colored dots?) to see how z example tweets did. When you hover the visualization, you see the actual tweet
+
 
 
 
