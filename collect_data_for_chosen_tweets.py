@@ -50,10 +50,10 @@ def compare_tweet_to_predictions(tweet,predictions):
 		print(tweet,predictions)
 
 #Static parameters
-CHOSEN_TWEETS = {'barackobama':[(0,'a'),(1,'b'),(2,'c'),(3,'d'),(4,'e')],
-				'jtimberlake':[(0,'a'),(1,'b'),(2,'c'),(3,'d'),(4,'e')],
-				'kimkardashian':[(0,'a'),(1,'b'),(2,'c'),(3,'d'),(4,'e')],
-				'ladygaga':[(0,'a'),(1,'b'),(2,'c'),(3,'d'),(4,'e')]}
+CHOSEN_TWEETS = {'barackobama':[(407,'748958754020790272'),(2692,'519190672251686912'),(74,'863756100948156416'),(26,'952914779458424832'),(1245,'650041294798983168')],
+				'ladygaga':[(1115,'742537484379136000'),(2022,'542455766561468420'),(1474,'643999055052300288'),(1701,'608364277431468032'),(1336,'674952742813736960')],
+				'jtimberlake':[(1922,'317033714838286336'),(2102,'275158352978386945'),(1479,'401614200638013440'),(1075,'523624551838519296'),(159,'955826144502218754')],
+				'kimkardashian':[(1183,'967031272278188033'),(608,'989227725935144961'),(340,'1004412177376333829'),(1908,'925595030340771840'),(1176,'967479788347600896')]}
 
 TWEETS_FOLDER = 'research/tweets/'
 ANALYSIS_FOLDER = 'research/analyses/'
@@ -84,6 +84,8 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 
 	#Save the chosen tweets
 	for tweet_index, tweet_id in tweet_ids:
+		tweet_index -= 1 #Index taken manually from line numbers
+
 		example_tweets[user].append(all_tweets[tweet_index])
 		scores_per_tweet[user].append({'id':tweet_id,'predicted_by':{}})
 
@@ -99,6 +101,7 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 
 		#Go over all example tweets
 		for n, (tweet_index, tweet_id) in enumerate(tweet_ids):
+			tweet_index -= 1 #Index taken manually from line numbers
 
 			all_predictions_for_tweet = []			
 			current_tweet = example_tweets[user][n]

@@ -1,8 +1,8 @@
 from os import listdir
 from json import loads, JSONDecodeError
 
-USER = 'ladygaga'
-FRIENDS = ['ladygaga','sarahtanno', 'itstonybennett']
+USER = 'barackobama'
+FRIENDS = ['barackobama', 'OFA','VP']
 
 ANALYSES_FOLDER = 'analyses/'
 TWEETS_FOLDER = 'tweets/'
@@ -76,8 +76,16 @@ all_tweet_info = []
 for n,tweet in enumerate(all_tweets):
 
 	cumulative_friend_rank = 0
+	scores = []
 
-	scores = [(model,tweet_scores[n]) for model, tweet_scores in tweet_scores_per_model.items()]
+	for model, tweet_scores in tweet_scores_per_model.items():
+
+		try:
+			scores.append((model,tweet_scores[n]))
+		except IndexError:
+			#print(model,len(tweet_scores),n)
+			continue;
+
 	scores = sorted(scores,key=lambda x: x[1], reverse=True)
 
 	for rank, (model, tweet_score) in enumerate(scores):
@@ -91,7 +99,7 @@ all_tweet_info = sorted(all_tweet_info, key = lambda x: x['cumulative_friend_ran
 
 for tweet_info in all_tweet_info:
 
-	if 'http' in tweet_info['content'] or 'President Obama' in tweet_info['content']:
+	if 'http' in tweet_info['content'] or '&amp;' in tweet_info['content'] or '@' in tweet_info['content'] or 'President Obama' in tweet_info['content']:
 		continue
 
 	print(tweet_info['content'])
