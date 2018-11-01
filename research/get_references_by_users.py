@@ -5,11 +5,16 @@ from sys import argv
 TWEETS_FOLDER = 'tweets/'
 REFERENCES_FOLDER = 'references/'
 MINIMUM_AMOUNT_OF_REFERENCES = 10
+OUTPUT = False
 
 def clean_user_name(name):
 	return name.replace("'s",'').replace('?','').replace('!','').replace(':','').replace('”','')
 
-users = [user.lower().strip() for user in open(argv[1])]
+try:
+	users = [user.lower().strip() for user in open(argv[1])]
+except FileNotFoundError:
+	users = [argv[1]]
+
 total_references = set()
 references_per_user = dict()
 
@@ -32,7 +37,10 @@ for user in users:
 			total_references.add(ref)
 			references_per_user[user].add(ref)
 
-	open(REFERENCES_FOLDER+user+'.txt','w').write('\n'.join(references_per_user[user]))
+	if OUTPUT:
+		open(REFERENCES_FOLDER+user+'.txt','w').write('\n'.join(references_per_user[user]))
 
-for ref in total_references:
-	print(ref)
+for user, freq in counter.most_common():
+
+	if len(user) > 0 and freq > MINIMUM_AMOUNT_OF_REFERENCES:
+		print(freq,user)

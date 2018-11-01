@@ -57,8 +57,8 @@ CHOSEN_TWEETS = {'barackobama':[(407,'748958754020790272'),(2692,'51919067225168
 
 TWEETS_FOLDER = 'research/tweets/'
 ANALYSIS_FOLDER = 'research/analyses/'
-SCORES_FILE = 'latest_scores'
-OUTPUT_FOLDER = 'js/'
+SCORES_FILE = 'scores_v2'
+OUTPUT_FOLDER = 'js_wip/'
 
 #Declare some dictionaries, keys will be added dynamically later
 example_tweets = {}
@@ -67,7 +67,12 @@ predictions_per_language_model = {}
 scores_per_tweet = {}
 
 # Already load in some info
-all_users = ['barackobama','jtimberlake','kimkardashian','ladygaga'] #list(CHOSEN_TWEETS.keys())
+users_and_friends = {'barackobama':['VP'],
+					 'jtimberlake':['ChrisStapleton','AnnaKendrick47','jimmyfallon'],
+					 'kimkardashian':['khloekardashian'],
+					 'ladygaga':['itstonybennett','MarkRonson','faspiras']
+					}
+
 all_scores = {line.split()[0]: float(line.split()[1]) for line in open(SCORES_FILE)}
 
 #Iterate over all users
@@ -90,7 +95,7 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 		scores_per_tweet[user].append({'id':tweet_id,'predicted_by':{}})
 
 	#Go over all models that predicted things for this user
-	for model in all_users:
+	for model in list(users_and_friends.keys()) + users_and_friends[user]:
 
 		#Get the score from a separate output file
 		scores_per_language_model[user].append((model,round(100*all_scores[user+'.'+model])))
@@ -127,6 +132,6 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 
 #Output all the collected data in json
 open(OUTPUT_FOLDER+'example_tweets.js','w').write('var example_tweets = '+dumps(example_tweets))
-open(OUTPUT_FOLDER+'scores_per_language_model.js','w').write('var scores = '+dumps(scores_per_language_model))
+open(OUTPUT_FOLDER+'scores_per_language_model.js','w').write('var scores_per_language_model = '+dumps(scores_per_language_model))
 open(OUTPUT_FOLDER+'predictions_per_language_model.js','w').write('var predictions_per_language_model = '+dumps(predictions_per_language_model))
 open(OUTPUT_FOLDER+'scores_per_tweet.js','w').write('var scores_per_tweet = '+dumps(scores_per_tweet))
