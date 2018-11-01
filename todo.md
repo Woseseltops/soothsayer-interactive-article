@@ -1,10 +1,7 @@
 Todo
 ----
-Bug: no visible tweets
-
-Have the general outline visible
-* texts in between
-* 3x social visualization
+Sociale model zichtbaar
+* MakeUpByMario nog niet in de data, gaf een probleem
 
 Backlog
 -------
