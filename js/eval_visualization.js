@@ -8,32 +8,53 @@ function updateModelScores(user)
 	var score_per_language_model = scores_per_language_model[user];
 	var c = 0;
 
+	//Change the names for each of the predictors, and hide otherwise
 	$('#eval_vis .predictor_name').each(function()
 	{
-		$(this).html('@'+score_per_language_model[c][0]);
+		if (score_per_language_model.length > c)
+		{
+			$(this).html('@'+score_per_language_model[c][0]);
+			$(this).parent().parent().show();
+		}
+		else
+		{
+			$(this).parent().parent().hide();
+		}
 		c++;
 	});
 
+	//Changes the scores
 	c = 0
 	$('#eval_vis .predictor_score').each(function()
 	{
-		$(this).html(score_per_language_model[c][1]+'%');
-		c++;
+		if (score_per_language_model.length > c)
+		{
+			$(this).html(score_per_language_model[c][1]+'%');
+			c++;
+		}
 	});
 
+	//Change the photos
 	c = 0
 	$('#eval_vis .predictor_picture').each(function()
 	{
-		$(this).attr('src','img/'+score_per_language_model[c][0]+'.jpg');
-		$(this).attr('model',''+score_per_language_model[c][0]);
-		c++;
+		if (score_per_language_model.length > c)
+		{
+			$(this).attr('src','img/'+score_per_language_model[c][0]+'.jpg');
+			$(this).attr('model',''+score_per_language_model[c][0]);
+			c++;
+		}
 	});
 
+	//Change the bar
 	c = 0
 	$('#eval_vis .bar').each(function()
 	{
-		$(this).css('width',bar_length_multiplier*score_per_language_model[c][1]+'px');
-		c++;
+		if (score_per_language_model.length > c)
+		{
+			$(this).css('width',bar_length_multiplier*score_per_language_model[c][1]+'px');
+			c++;
+		}
 	});			
 }
 
@@ -57,7 +78,14 @@ $(document).ready(function()
 
 		$(this).addClass('selected');
 
-		selected_user = $(this).attr('user')
+		selected_user = $(this).attr('user');
+
+		//It can happen that you're switching to a user for which the current model doesn't have predictions
+		if (!(selected_model in scores_per_tweet[selected_user][0]['predicted_by']))
+		{
+			selected_model = selected_user;	
+		}
+
 		updateExampleTweet(selected_user,selected_model,selected_tweet_index);
 		updateModelScores(selected_user)				
 	});
@@ -71,7 +99,7 @@ $(document).ready(function()
 
 		$(this).addClass('selected');
 
-		selected_model = $(this).attr('model')
+		selected_model = $(this).attr('model');
 		updateExampleTweet(selected_user,selected_model,selected_tweet_index);
 
 		$('#percentage_explanation').html('of the characters in this tweet were correctly predicted by the language model of @'+selected_model)

@@ -58,7 +58,7 @@ CHOSEN_TWEETS = {'barackobama':[(407,'748958754020790272'),(2692,'51919067225168
 TWEETS_FOLDER = 'research/tweets/'
 ANALYSIS_FOLDER = 'research/analyses/'
 SCORES_FILE = 'scores_v2'
-OUTPUT_FOLDER = 'js_wip/'
+OUTPUT_FOLDER = 'js/'
 
 #Declare some dictionaries, keys will be added dynamically later
 example_tweets = {}
@@ -129,6 +129,9 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 
 			score, annotated_tweet = compare_tweet_to_predictions(current_tweet,current_analysis)
 			scores_per_tweet[user][n]['predicted_by'][model] = {'text':annotated_tweet,'score':round(100*score)}
+
+	#Sort the model scores
+	scores_per_language_model[user].sort(key=lambda x: x[1],reverse=True)
 
 #Output all the collected data in json
 open(OUTPUT_FOLDER+'example_tweets.js','w').write('var example_tweets = '+dumps(example_tweets))
