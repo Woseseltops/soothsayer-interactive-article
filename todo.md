@@ -2,10 +2,11 @@ Todo
 ----
 Sociale model zichtbaar
 * MakeUpByMario nog niet in de data, gaf een probleem
+* Problemen met geselecteerde model fixen nu ze op volgorde van performance staan
+* Splitsen: apart panel sociale modellen
 
 Backlog
 -------
-Works in Chrome
 Responsive
 
 Overview
