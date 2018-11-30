@@ -138,11 +138,12 @@ def pick_best_matching_words_from_dictionary(distribution,target,n):
 
 if __name__ == '__main__':
 
-	INSTRUCTION_FILE = 'experiment3_instr.txt'
+	INSTRUCTION_FILE = 'experiment4_instr.txt'
 	TIMBL_MODELS_FOLDER = 'timbl_models/'
 	ANALYSES_FOLDER = 'analyses/'
 	NR_OF_FEATURES = 3
 	REMEMBER_NR_OF_OPTIONS = 3
+	SKIP = False
 
 	#Go trhough the file with instructions
 	for line in open(INSTRUCTION_FILE):
@@ -153,7 +154,7 @@ if __name__ == '__main__':
 		train_users = train_users.split(',')
 
 		#Is this instructions already in progress? Go to the next one
-		if find_matching_model_files(TIMBL_MODELS_FOLDER,test_user,train_users):
+		if SKIP and find_matching_model_files(TIMBL_MODELS_FOLDER,test_user,train_users):
 			continue
 
 		#Create train instances for this experiment
@@ -164,6 +165,8 @@ if __name__ == '__main__':
 
 		#Go through the tweets of the test user
 		for tweet_index, tweet in enumerate(open(TWEET_FOLDER+test_user+'.txt')):
+
+			print(test_user,train_users,tweet_index)
 
 			#Train the model on all tweets except this one
 			classifier, word_frequencies = create_classifier_and_word_freq_list(train_instances,TIMBL_MODELS_FOLDER,train_users,test_user,tweet_index)

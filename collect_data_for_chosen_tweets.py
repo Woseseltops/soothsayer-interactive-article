@@ -69,7 +69,7 @@ scores_per_tweet = {}
 # Already load in some info
 users_and_friends = {'barackobama':['VP'],
 					 'jtimberlake':['ChrisStapleton','AnnaKendrick47','jimmyfallon'],
-					 'kimkardashian':['khloekardashian'],
+					 'kimkardashian':['khloekardashian','MakeupByMario'],
 					 'ladygaga':['itstonybennett','MarkRonson','faspiras']
 					}
 

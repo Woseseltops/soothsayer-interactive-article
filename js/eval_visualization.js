@@ -2,6 +2,29 @@ var selected_user = 'barackobama'
 var selected_model = 'barackobama'
 var selected_tweet_index = 0
 
+function updateSelectedModel(model)
+{
+	$('#eval_vis .model_select').each(function()
+	{
+		console.log($(this).attr('model')+' '+model)
+		if ($(this).attr('model') == model)
+		{
+			console.log('yes')
+			$(this).addClass('selected');
+		} 
+		else
+		{
+			console.log('no')
+			$(this).removeClass('selected');
+		}
+	});
+
+	selected_model = model
+	updateExampleTweet(selected_user,selected_model,selected_tweet_index);
+
+	$('#percentage_explanation').html('of the characters in this tweet were correctly predicted by the language model of @'+selected_model)
+}
+
 function updateModelScores(user)
 {
 	var bar_length_multiplier = 3;
@@ -80,29 +103,14 @@ $(document).ready(function()
 
 		selected_user = $(this).attr('user');
 
-		//It can happen that you're switching to a user for which the current model doesn't have predictions
-		if (!(selected_model in scores_per_tweet[selected_user][0]['predicted_by']))
-		{
-			selected_model = selected_user;	
-		}
-
+		updateModelScores(selected_user)	
+		updateSelectedModel(selected_user)			
 		updateExampleTweet(selected_user,selected_model,selected_tweet_index);
-		updateModelScores(selected_user)				
 	});
 
 	$('#eval_vis .model_select').click(function()
 	{
-		$('#eval_vis .model_select').each(function()
-		{
-			$(this).removeClass('selected');
-		});
-
-		$(this).addClass('selected');
-
-		selected_model = $(this).attr('model');
-		updateExampleTweet(selected_user,selected_model,selected_tweet_index);
-
-		$('#percentage_explanation').html('of the characters in this tweet were correctly predicted by the language model of @'+selected_model)
+		updateSelectedModel($(this).attr('model'));
 	});
 
 	$('#eval_vis .tweet_select').click(function()
