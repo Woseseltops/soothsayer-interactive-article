@@ -27,7 +27,7 @@
 
 <p class="lead">If you have ever typed something on a smartphone, you have used text prediction. In this article, we will see how text predictors can work and how finding the best example language dataset is crucial for what kind of predictions come out. To see how this all works, we will try to predict tweets by four famous Twitter users.</p>
 
-<p><span id="first_character">T</span>o be able to make useful predictions, a text predictor needs as much knowledge about language as possible. Adding this knowledge by hand would be an enormous task, so this is often done by <em>machine learning</em>. These days, machine learning algorithms called <em>neural networks</em> are the best at text prediction, because of their remarkable ability to <a>capture meaning in a list of numbers</a> and to learn about the <a>hierarchical levels of language</a> (from letters, to syllables, to words, phrases, sentences, etc). The downside, however, is that they can be pretty difficult to grasp - understanding why neural networks do the things they do is a <a>whole research field on its own</a>. </p> 
+<p><span id="first_character">T</span>o be able to make useful predictions, a text predictor needs as much knowledge about language as possible. Adding this knowledge by hand would be an enormous task, so this is often done by <em>machine learning</em>. These days, machine learning algorithms called <em>neural networks</em> are the best at text prediction, because of their remarkable ability to <a href="https://code.google.com/archive/p/word2vec/">capture meaning in a list of numbers</a> and to learn about the <a href="https://chunml.github.io/ChunML.github.io/project/Creating-Text-Generator-Using-Recurrent-Neural-Network/">hierarchical levels of language</a> (from letters, to syllables, to words, phrases, sentences, etc). The downside, however, is that they can be pretty difficult to grasp - understanding why neural networks do the things they do is a <a href="https://distill.pub/2018/building-blocks/">whole research field on its own</a>. </p> 
 
 <p>Fortunately, there are surprisingly effective machine learning techniques that are much simpler. For example, the algorithm <em>K Nearest Neighbours</em> works by looking at the last few words you wrote, comparing these to all groups of words seen during the training phase, and giving as the best guess what followed groups of similar words in the past. Let's see how that works for the tweets of 4 <a href="https://en.wikipedia.org/wiki/List_of_most-followed_Twitter_accounts#Top_50_accounts">of the most followed Twitter users on Earth</a>. You can interact and play around with the results in the panel below:</p>
 
@@ -35,7 +35,7 @@
 
 <p>Often, there is simply no similar group of words available to make a prediction. In that case, we just try to make a prediction based on a list of words frequently used by the Twitter user; these situations are blue in the panel above. The result is what you could call a very simple statistical language model. It's built entirely of example language data: if you put in different data, you get another model with other predictions. You can see that clearly if you let the models of our four celebrities predict each other's tweets:</p>
 
-<div class="visualization" id="models_vis">
+	<div class="visualization" id="models_vis">
 	<script src="js/models_visualization.js" type="text/javascript"></script>
 
 	<div class="visualization_section">
