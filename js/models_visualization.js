@@ -1,41 +1,50 @@
-var selected_user = 'barackobama';
-var selected_tweet_index = 0;
-var progress = 1;
-
-function updateProgressSlider()
+class ModelsVisualization
 {
-	$('#progress_slider').attr('max',example_tweets[selected_user][selected_tweet_index].length);
-
-	progress = 1;
-	$('#progress_slider').val(progress);
-};
-
-function updateTweetProgress()
-{
-	var progress_text = example_tweets[selected_user][selected_tweet_index].substring(0,progress);
-	$('#models_vis .predicted_text').html(progress_text+'|');
-}
-
-function updatePredictions()
-{
-	predictions_for_this_user = predictions_per_language_model[selected_user]
-	var models = ['barackobama','jtimberlake','kimkardashian','ladygaga'];
-
-	for (model_index in models)
+	constructor()
 	{
-		var model = models[model_index]
-		var predictions = predictions_for_this_user[model][selected_tweet_index][progress-1];
-		$('#'+model+'_predictions').html(predictions.join(', '))
+		this.selected_user = 'barackobama';
+		this.selected_tweet_index = 0;
+		this.progress = 1;		
 	}
-}
 
-function updateEmbeddedTweet()
-{
-	$('#models_vis .embedded_tweet_area').html('<blockquote class="twitter-tweet" data-conversation="none" data-lang="en-gb"><p lang="en" dir="ltr"><a id="embedded_tweet" href="https://twitter.com/'+selected_user+'/status/'+scores_per_tweet[selected_user][selected_tweet_index]['id']+'"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><//script>')
+	updateProgressSlider()
+	{
+		$('#progress_slider').attr('max',example_tweets[this.selected_user][this.selected_tweet_index].length);
+
+		this.progress = 1;
+		$('#progress_slider').val(this.progress);
+	};
+
+	updateTweetProgress()
+	{
+		var progress_text = example_tweets[this.selected_user][this.selected_tweet_index].substring(0,this.progress);
+		$('#models_vis .predicted_text').html(progress_text+'|');
+	}
+
+	updatePredictions()
+	{
+		var predictions_for_this_user = predictions_per_language_model[this.selected_user]
+		var models = ['barackobama','jtimberlake','kimkardashian','ladygaga'];
+
+		for (var model_index in models)
+		{
+			var model = models[model_index]
+			var predictions = predictions_for_this_user[model][this.selected_tweet_index][this.progress-1];
+			$('#'+model+'_predictions').html(predictions.join(', '))
+		}
+	}
+
+	updateEmbeddedTweet()
+	{
+		$('#models_vis .embedded_tweet_area').html('<blockquote class="twitter-tweet" data-conversation="none" data-lang="en-gb"><p lang="en" dir="ltr"><a id="embedded_tweet" href="https://twitter.com/'+this.selected_user+'/status/'+scores_per_tweet[this.selected_user][this.selected_tweet_index]['id']+'"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><//script>')
+	}
 }
 
 $(document).ready(function()
 {
+	console.log('models ready');
+	models_vis = new ModelsVisualization();
+
 	$('#models_vis .user_select').click(function()
 	{
 		$('#models_vis .user_select').each(function()
@@ -45,12 +54,12 @@ $(document).ready(function()
 
 		$(this).addClass('selected');
 
-		selected_user = $(this).attr('user');
+		models_vis.selected_user = $(this).attr('user');
 
-		updateProgressSlider();
-		updateTweetProgress();
-		updatePredictions();
-		updateEmbeddedTweet();
+		models_vis.updateProgressSlider();
+		models_vis.updateTweetProgress();
+		models_vis.updatePredictions();
+		models_vis.updateEmbeddedTweet();
 	});
 
 	$('#models_vis .tweet_select').click(function()
@@ -62,47 +71,47 @@ $(document).ready(function()
 
 		$(this).addClass('selected');
 
-		selected_tweet_index = $(this).attr('tweet_index')-1;
+		models_vis.selected_tweet_index = $(this).attr('tweet_index')-1;
 
-		updateProgressSlider();
-		updateTweetProgress();
-		updatePredictions();
-		updateEmbeddedTweet();
+		models_vis.updateProgressSlider();
+		models_vis.updateTweetProgress();
+		models_vis.updatePredictions();
+		models_vis.updateEmbeddedTweet();
 	});
 
 	$('#models_vis #progress_slider').on('input',function()
 	{
-		progress = parseInt($(this).val());
-		updateTweetProgress();
-		updatePredictions();
+		models_vis.progress = parseInt($(this).val());
+		models_vis.updateTweetProgress();
+		models_vis.updatePredictions();
 	});
 
 	$('.arrow_left').click(function()
 	{
-		if (progress > 1)
+		if (models_vis.progress > 1)
 		{
-			progress -= 1;
+			models_vis.progress -= 1;
 		}
 		
-		$('#progress_slider').val(progress);
-		updateTweetProgress();
-		updatePredictions();
+		$('#progress_slider').val(models_vis.progress);
+		models_vis.updateTweetProgress();
+		models_vis.updatePredictions();
 	});
 
 	$('.arrow_right').click(function()
 	{
-		if (progress < example_tweets[selected_user][selected_tweet_index].length)
+		if (models_vis.progress < example_tweets[models_vis.selected_user][models_vis.selected_tweet_index].length)
 		{
-			progress += 1;
+			models_vis.progress += 1;
 		}
 		
-		$('#progress_slider').val(progress);
-		updateTweetProgress();
-		updatePredictions();
+		$('#progress_slider').val(models_vis.progress);
+		models_vis.updateTweetProgress();
+		models_vis.updatePredictions();
 	});
 
-	updateProgressSlider();
-	updateTweetProgress();
-	updatePredictions();	
-	updateEmbeddedTweet();		
+	models_vis.updateProgressSlider();
+	models_vis.updateTweetProgress();
+	models_vis.updatePredictions();	
+	models_vis.updateEmbeddedTweet();		
 });
