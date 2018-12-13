@@ -11,6 +11,8 @@
 .visualization_section
 {
 	padding: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;	
 }
 
 .profile_picture
@@ -29,6 +31,12 @@
 .user_select:hover, .model_select:hover
 {
 	filter: grayscale(0%);
+}
+
+.predictor_picture
+{
+	width: 65px;
+	margin: 5px;
 }
 
 img.selected
@@ -86,7 +94,7 @@ a.selected
 
 .bar_column
 {
-	width: 220px;
+	width: 300px;
 }
 
 .tweet_select
