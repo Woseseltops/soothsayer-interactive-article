@@ -30,7 +30,7 @@ class EvalVisualization
 	updateModelScores(user)
 	{
 		var bar_length_multiplier = 3;
-		var score_per_language_model = scores_per_language_model[user];
+		var score_per_language_model = eval_scores_per_language_model[user];
 		var c = 0;
 
 		//Change the names for each of the predictors, and hide otherwise

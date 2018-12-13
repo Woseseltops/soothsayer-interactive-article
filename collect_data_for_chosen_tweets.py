@@ -62,7 +62,8 @@ OUTPUT_FOLDER = 'js/'
 
 #Declare some dictionaries, keys will be added dynamically later
 example_tweets = {}
-scores_per_language_model = {}
+eval_scores_per_language_model = {}
+sociolect_scores_per_language_model = {}
 predictions_per_language_model = {}
 scores_per_tweet = {}
 
@@ -80,7 +81,8 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 
 	#Add keys to dict
 	example_tweets[user] = []
-	scores_per_language_model[user] = []
+	eval_scores_per_language_model[user] = []
+	sociolect_scores_per_language_model[user] = []
 	predictions_per_language_model[user] = {}
 	scores_per_tweet[user] = []
 
@@ -98,8 +100,11 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 	for model in list(users_and_friends.keys()) + users_and_friends[user]:
 
 		#Get the score from a separate output file
-		scores_per_language_model[user].append((model,round(100*all_scores[user+'.'+model])))
 		predictions_per_language_model[user][model] = []
+		sociolect_scores_per_language_model[user].append((model,round(100*all_scores[user+'.'+model])))
+
+		if model in users_and_friends.keys():
+			eval_scores_per_language_model[user].append((model,round(100*all_scores[user+'.'+model])))
 
 		#Collect all analyses for this user model combi
 		all_analyses = open(ANALYSIS_FOLDER+user+'.'+model).readlines()
@@ -131,10 +136,12 @@ for user, tweet_ids in CHOSEN_TWEETS.items():
 			scores_per_tweet[user][n]['predicted_by'][model] = {'text':annotated_tweet,'score':round(100*score)}
 
 	#Sort the model scores
-	scores_per_language_model[user].sort(key=lambda x: x[1],reverse=True)
+	eval_scores_per_language_model[user].sort(key=lambda x: x[1],reverse=True)
+	sociolect_scores_per_language_model[user].sort(key=lambda x: x[1],reverse=True)
 
 #Output all the collected data in json
 open(OUTPUT_FOLDER+'example_tweets.js','w').write('var example_tweets = '+dumps(example_tweets))
-open(OUTPUT_FOLDER+'scores_per_language_model.js','w').write('var scores_per_language_model = '+dumps(scores_per_language_model))
+open(OUTPUT_FOLDER+'eval_scores_per_language_model.js','w').write('var eval_scores_per_language_model = '+dumps(eval_scores_per_language_model))
+open(OUTPUT_FOLDER+'sociolect_scores_per_language_model.js','w').write('var sociolect_scores_per_language_model = '+dumps(sociolect_scores_per_language_model))
 open(OUTPUT_FOLDER+'predictions_per_language_model.js','w').write('var predictions_per_language_model = '+dumps(predictions_per_language_model))
 open(OUTPUT_FOLDER+'scores_per_tweet.js','w').write('var scores_per_tweet = '+dumps(scores_per_tweet))

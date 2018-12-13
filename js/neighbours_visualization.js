@@ -9,8 +9,6 @@ class NeighboursVisualization
 
 	updateProgressSlider()
 	{
-		console.log('update progress')
-
 		$('#neighbours_progress_slider').attr('max',example_tweets[this.selected_user][this.selected_tweet_index].length);
 
 		this.progress = 1;
