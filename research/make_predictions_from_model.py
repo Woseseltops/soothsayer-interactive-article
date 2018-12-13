@@ -42,7 +42,7 @@ def tweet_to_instances(tweet,nr_of_features,author,original_tweet_index):
 
 	return instances
 
-def get_instances_for_twitter_user(username):
+def get_instances_for_twitter_user(username,nr_of_features = 3):
 
 	#Collect all tweets and instances we have for this user
 	total_tweets = []
@@ -50,7 +50,7 @@ def get_instances_for_twitter_user(username):
 
 	for tweet_index, tweet in enumerate(open(TWEET_FOLDER+username+'.txt')):
 		total_tweets.append(tweet)
-		instances_for_this_tweet = tweet_to_instances(tweet,NR_OF_FEATURES,username,tweet_index)
+		instances_for_this_tweet = tweet_to_instances(tweet,nr_of_features,username,tweet_index)
 		total_instances += instances_for_this_tweet
 
 	return total_instances
@@ -158,7 +158,7 @@ if __name__ == '__main__':
 			continue
 
 		#Create train instances for this experiment
-		train_instances = list(chain([get_instances_for_twitter_user(train_user) for train_user in train_users]))[0]
+		train_instances = list(chain([get_instances_for_twitter_user(train_user,NR_OF_FEATURES) for train_user in train_users]))[0]
 
 		#Create output file
 		output_file = open(ANALYSES_FOLDER+test_user+'.'+'_'.join(train_users),'w')

@@ -9,10 +9,10 @@ class ModelsVisualization
 
 	updateProgressSlider()
 	{
-		$('#progress_slider').attr('max',example_tweets[this.selected_user][this.selected_tweet_index].length);
+		$('#models_progress_slider').attr('max',example_tweets[this.selected_user][this.selected_tweet_index].length);
 
 		this.progress = 1;
-		$('#progress_slider').val(this.progress);
+		$('#models_progress_slider').val(this.progress);
 	};
 
 	updateTweetProgress()
@@ -79,7 +79,7 @@ $(document).ready(function()
 		models_vis.updateEmbeddedTweet();
 	});
 
-	$('#models_vis #progress_slider').on('input',function()
+	$('#models_vis #models_progress_slider').on('input',function()
 	{
 		models_vis.progress = parseInt($(this).val());
 		models_vis.updateTweetProgress();
@@ -93,7 +93,7 @@ $(document).ready(function()
 			models_vis.progress -= 1;
 		}
 		
-		$('#progress_slider').val(models_vis.progress);
+		$('#models_progress_slider').val(models_vis.progress);
 		models_vis.updateTweetProgress();
 		models_vis.updatePredictions();
 	});
@@ -105,7 +105,7 @@ $(document).ready(function()
 			models_vis.progress += 1;
 		}
 		
-		$('#progress_slider').val(models_vis.progress);
+		$('#models_progress_slider').val(models_vis.progress);
 		models_vis.updateTweetProgress();
 		models_vis.updatePredictions();
 	});

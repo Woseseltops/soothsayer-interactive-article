@@ -1,9 +1,5 @@
 Todo
 ----
-Sociale model zichtbaar
-* Problemen met geselecteerde model fixen nu ze op volgorde van performance staan
-* Splitsen: apart panel sociale modellen
-* geselecteerde plaatje ook een beetje lichter maken
 
 Backlog
 -------
