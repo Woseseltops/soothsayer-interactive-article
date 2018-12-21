@@ -9,6 +9,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script src="js/example_tweets.js" type="text/javascript"></script>
+<script src="js/nearest_neighbours.js" type="text/javascript"></script>
 <script src="js/eval_scores_per_language_model.js" type="text/javascript"></script>
 <script src="js/sociolect_scores_per_language_model.js" type="text/javascript"></script>
 <script src="js/scores_per_tweet.js" type="text/javascript"></script>
@@ -28,7 +29,7 @@
 
 <p class="lead">If you have ever typed something on a smartphone, you have used text prediction. In this article, we will see how text predictors can work and how finding the best example language dataset is crucial for what kind of predictions come out. To see how this all works, we will try to predict tweets by four famous Twitter users.</p>
 
-<p><span id="first_character">T</span>o be able to make useful predictions, a text predictor needs as much knowledge about language as possible. Adding this knowledge by hand would be an enormous task, so this is often done by <em>machine learning</em>. These days, machine learning algorithms called <em>neural networks</em> are the best at text prediction, because of their remarkable ability to <a href="https://code.google.com/archive/p/word2vec/">capture meaning in a list of numbers</a> and to learn about the <a href="https://chunml.github.io/ChunML.github.io/project/Creating-Text-Generator-Using-Recurrent-Neural-Network/">hierarchical levels of language</a> (from letters, to syllables, to words, phrases, sentences, etc). The downside, however, is that they can be pretty difficult to grasp - understanding why neural networks do the things they do is a <a href="https://distill.pub/2018/building-blocks/">whole research field on its own</a>. </p> 
+<p><span id="first_character">T</span>o be able to make useful predictions, a text predictor needs as much knowledge about language as possible. Adding this knowledge by hand would be an enormous task, so this is often done by <em>machine learning</em>. These days, machine learning algorithms called <em>neural networks</em> are the best at text prediction, because of their remarkable ability to <a href="http://bionlp-www.utu.fi/wv_demo/">capture meaning in a list of numbers</a> and to learn about the <a href="https://chunml.github.io/ChunML.github.io/project/Creating-Text-Generator-Using-Recurrent-Neural-Network/">hierarchical levels of language</a> (from letters, to syllables, to words, phrases, sentences, etc). The downside, however, is that they can be pretty difficult to grasp - understanding why neural networks do the things they do is a <a href="https://distill.pub/2018/building-blocks/">whole research field on its own</a>. </p> 
 
 <p>Fortunately, there are surprisingly effective machine learning techniques that are much simpler. For example, the algorithm <em>K Nearest Neighbours</em> works by looking at the last few words you wrote, comparing these to all groups of words seen during the training phase, and giving as the best guess what followed groups of similar words in the past. Let's see how that works for the tweets of 4 <a href="https://en.wikipedia.org/wiki/List_of_most-followed_Twitter_accounts#Top_50_accounts">of the most followed Twitter users on Earth</a>. You can interact and play around with the results in the panel below:</p>
 
@@ -75,11 +76,12 @@
 		<div class="section_title">
 			Best matching group of words from history
 		</div>
-
+		<div class="neighbours_section">
+		</div>
 	</div>
 </div>
 
-<p>Often, there is simply no similar group of words available to make a prediction. In that case, we just try to make a prediction based on a list of words frequently used by the Twitter user; these situations are blue in the panel above. The result is what you could call a very simple statistical language model. It's built entirely of example language data: if you put in different data, you get another model with other predictions. You can see that clearly if you let the models of our four celebrities predict each other's tweets:</p>
+<p>As you might have noticed, there often is no similar group of words available to make a prediction. In that case, we just try to make a prediction based on a list of words frequently used by the Twitter user. The result is what you could call a very simple statistical language model. It's built entirely of example language data: if you put in different data, you get another model with other predictions. You can see that clearly if you let the models of our four celebrities predict each other's tweets:</p>
 
 <div class="visualization" id="models_vis">
 	<script src="js/models_visualization.js" type="text/javascript"></script>
@@ -142,9 +144,9 @@
 	</div>
 </div>
 
-<p>You might have noticed that the model of the user itself is the one that makes the correct prediction most often. This follows from the more general phenomenon in machine learning that the more similar the training data is to the production data, the better the results will be. Or, more simply: nobody writes more like you than you, so you are your own best language predictor.</p>
+<p>As you can see, the model of the user itself is the one that makes the correct prediction most often. This follows from the more general phenomenon in machine learning that the more similar the training data is to the production data, the better the results will be. Or, more simply: nobody writes more like you than you, so you are your own best language predictor.</p>
 
-<p>Instead of just eyeballing which model works better, we can actually measure it and count the number of correctly guessed characters. You could argue that we are too harsh on ourselves if we count this way, as most language prediction apps give multiple options, but it's at least a good tool to see which language models work best.</p>
+<p>Instead of just eyeballing which model works better, we can actually measure it and count the number of correctly guessed characters. You could argue that we are too harsh on ourselves if we count this way, as most language prediction apps give multiple options, but it's at least a good tool to see which language models work best. Let's see the percentages below as lower boundaries of what's possible with this technique.</p>
 
 <div class="visualization" id="eval_vis">
 	<script src="js/eval_visualization.js" type="text/javascript"></script>
@@ -265,7 +267,9 @@
 	</div>
 </div>
 
-<p>Although there are a few individual example tweets that show a different pattern, on average we see that every user scores best with his or her own language model; in other words, if we want to guess what a person is going to write next, our best guess is something similar to what this same person has written in the past. We've picked Twitter for this article because it is the perfect resource to show the power of this idea: it's effectively a huge collection of language organized per author.</p>
+<p>Here too, we see that the more similar two Twitter users are, the more likely they are to correctly predict each other's tweets: the two singers Justin Timberlake and Lady Gaga are each other's best predictors. Barack Obama and Kim Kardashian, on the other hand, two people who got famous for completely different things, are each other's worst predictors. In other words, if we want to guess what a person is going to write next, our best guess is something similar to what this same person has written in the past. That's also why Twitter is the perfect resource to show the power of this idea: it's effectively a huge collection of language organized per author.</p>
+
+<p>On the level of individual tweets, something else might strike your eye too: the statements above are not true for each tweet. For example, Kim Kardashian's tweat about 'working together with organizations' was predicted by better by the language model of Barack Obama than her own. 'You are your own best language predictor' is more of a tendency that a hard rule, but as long as you try it on enough tweets you will see that it holds most of the time.</p>
 
 <p>Our example users so far have been really active Twitter users with thousands of Tweets. However, we don't have that much material for most people. How do we solve that? We have learned above that we need example language as similar to the language we are trying to predict... but where to find that? Sociolinguistics has the answer: people who talk to each other a lot start to speak alike.</p>
 
@@ -403,6 +407,8 @@
 	</div>
 </div>
 
-<p>As you can see, the 'friend' models are directly below the personal models in almost all cases. Part of this effect can of course be explained by overlapping topics; the models of Justin Timberlake and Lady Gaga score probably high on each other's tweets because they are both tweeting about things like songs, concerts and fans. Something similar is probably happening with the predictions of @VP (Vice President) for the tweets of Obama: Obama only mentioned @VP when it was still being used by Joe Biden, but the tweets of current Vice President Mike Pence are still good predictors because of their political nature. Topics are not the only predictor, though; research has shown that even if you take out all content words, leaving only words like 'the', 'but', 'and', 'is', etc, tweets by friends are still better predictors than tweets by random people. (reference article 'MapTwitter tribal language(s)')</p>
+<p>As you can see, the 'friend' models are directly below the personal models in almost all cases. Part of this effect can of course be explained by overlapping topics; the models of Justin Timberlake and Lady Gaga score probably high on each other's tweets because they are both tweeting about things like songs, concerts and fans. Something similar is probably happening with the predictions of @VP (Vice President) for the tweets of Obama: Obama only mentioned @VP when it was still being used by Joe Biden, but the tweets of current Vice President Mike Pence are still good predictors because of their political nature. Topics are not the only predictor, though; research has shown that even if you take out all content words, leaving only words like 'the', 'but', 'and', 'is', etc, tweets by friends are still better predictors than tweets by random people. (reference article 'MapTwitter tribal language(s)').</p>
+
+<p>SPETTEREND EINDE.</p>
 
 </body>
