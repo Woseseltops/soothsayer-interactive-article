@@ -40,7 +40,7 @@ CHOSEN_TWEETS = {'barackobama':[(407,'748958754020790272'),(2692,'51919067225168
 				'jtimberlake':[(1922,'317033714838286336'),(2102,'275158352978386945'),(1479,'401614200638013440'),(1075,'523624551838519296'),(159,'955826144502218754')],
 				'kimkardashian':[(1183,'967031272278188033'),(608,'989227725935144961'),(340,'1004412177376333829'),(1908,'925595030340771840'),(1176,'967479788347600896')]}
 
-OUTPUT_FILE = 'nearest_neighbors.js'
+OUTPUT_FILE = '../js/nearest_neighbours.js'
 
 result = {}
 
@@ -82,4 +82,4 @@ for twitter_user, tweets in CHOSEN_TWEETS.items():
 
 		result[twitter_user].append(best_trigrams_for_tweet)
 
-open(OUTPUT_FILE,'w').write('var nearest_neighbors = '+dumps(result)+';')
+open(OUTPUT_FILE,'w').write('var nearest_neighbours = '+dumps(result)+';')

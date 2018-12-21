@@ -200,7 +200,7 @@ a.selected
   float: left;
 }	
 
-.correct_char
+.correct_char, .lastwords
 {
 	color: hsl(200, 80%, 53%);			
 }		

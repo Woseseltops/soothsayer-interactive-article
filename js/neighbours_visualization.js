@@ -18,20 +18,32 @@ class NeighboursVisualization
 	updateTweetProgress()
 	{
 		var progress_text = example_tweets[this.selected_user][this.selected_tweet_index].substring(0,this.progress);
+		var words = progress_text.split(' ')
+		var last_words = words.slice(words.length-4,words.length-1)		
+		last_words = last_words[0]+' '+last_words[1]+' '+last_words[2]
+
+		progress_text = progress_text.replace(last_words,'<span class="lastwords">'+last_words+'</span>')
+
 		$('#neighbours_vis .predicted_text').html(progress_text+'|');
 	}
 
-	updatePredictions()
+	updateNeighbours()
 	{
-		var predictions_for_this_user = predictions_per_language_model[this.selected_user]
-		var models = ['barackobama','jtimberlake','kimkardashian','ladygaga'];
+		var html = '<ul>';
+		var current_neighbours = nearest_neighbours[this.selected_user][this.selected_tweet_index][this.progress];
 
-		for (var model_index in models)
+		for (var neighbour_index in current_neighbours)
 		{
-			var model = models[model_index]
-			var predictions = predictions_for_this_user[model][this.selected_tweet_index][this.progress-1];
-			$('#'+model+'_predictions').html(predictions.join(', '))
+			var word1 = current_neighbours[neighbour_index][0][0];
+			var word2 = current_neighbours[neighbour_index][0][1];
+			var word3 = current_neighbours[neighbour_index][0][2];
+			var prediction = current_neighbours[neighbour_index][1];
+			html += '<li><span class="lastwords">'+word1+' '+word2+' '+word3+'</span>: '+prediction+'</li>';
 		}
+
+		html += '</ul>';
+
+		$('#neighbours_vis .neighbours_section').html(html);
 	}
 
 	updateEmbeddedTweet()
@@ -58,8 +70,8 @@ $(document).ready(function()
 
 		neighbours_vis.updateProgressSlider();
 		neighbours_vis.updateTweetProgress();
-		neighbours_vis.updatePredictions();
-		neighbours_vis.updateEmbeddedTweet();
+		neighbours_vis.updateNeighbours();
+		neighbours_vis.updateEmbeddedTweet();		
 	});
 
 	$('#neighbours_vis .tweet_select').click(function()
@@ -75,7 +87,7 @@ $(document).ready(function()
 
 		neighbours_vis.updateProgressSlider();
 		neighbours_vis.updateTweetProgress();
-		neighbours_vis.updatePredictions();
+		neighbours_vis.updateNeighbours();
 		neighbours_vis.updateEmbeddedTweet();
 	});
 
@@ -83,7 +95,7 @@ $(document).ready(function()
 	{
 		neighbours_vis.progress = parseInt($(this).val());
 		neighbours_vis.updateTweetProgress();
-		neighbours_vis.updatePredictions();
+		neighbours_vis.updateNeighbours();
 	});
 
 	$('.arrow_left').click(function()
@@ -95,7 +107,7 @@ $(document).ready(function()
 		
 		$('#neighbours_progress_slider').val(neighbours_vis.progress);
 		neighbours_vis.updateTweetProgress();
-		neighbours_vis.updatePredictions();
+		neighbours_vis.updateNeighbours();
 	});
 
 	$('.arrow_right').click(function()
@@ -107,11 +119,11 @@ $(document).ready(function()
 		
 		$('#neighbours_progress_slider').val(neighbours_vis.progress);
 		neighbours_vis.updateTweetProgress();
-		neighbours_vis.updatePredictions();
+		neighbours_vis.updateNeighbours();
 	});
 
 	neighbours_vis.updateProgressSlider();
 	neighbours_vis.updateTweetProgress();
-	neighbours_vis.updatePredictions();	
+	neighbours_vis.updateNeighbours();	
 	neighbours_vis.updateEmbeddedTweet();		
 });
