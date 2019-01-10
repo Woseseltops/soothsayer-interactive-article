@@ -35,8 +35,9 @@
 
 .predictor_picture
 {
-	width: 65px;
-	margin: 5px;
+    width: 65px;
+    margin: 1px;
+    margin-left: 9px;
 }
 
 img.selected
@@ -59,6 +60,7 @@ a.selected
 	text-transform: uppercase;	
 	color: hsla(0, 0%, 0%, 0.4);	
 	margin: 15px;		
+	margin-bottom: 5px;
 	font-size: 14px;
 }		
 
@@ -79,7 +81,7 @@ a.selected
 .predicted_text
 {
 	font-size: 20px;
-	margin-top: 40px;			
+	margin-top: 8px;			
 }
 
 .bar
@@ -105,12 +107,18 @@ a.selected
 	color: hsla(0, 0%, 0%, 0.2);				
 }
 
+.tweet_select_area
+{
+	margin-top: -10px;
+}
+
 .predicted_tweet_percentage
 {
 	color: hsl(200, 80%, 53%);
 	margin: auto;
+	margin-bottom: -15px;
 	font-size: 60px;
-	width: 160px;
+	width: 160px;	
 	text-align: center;
 }
 
