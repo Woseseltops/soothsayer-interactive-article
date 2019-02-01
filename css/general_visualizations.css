@@ -128,6 +128,18 @@ a.selected
 	margin: auto;
 }
 
+.neighbours_section table
+{
+    font-size: 25px;
+    color: hsla(0, 0%, 0%, 0.6509803921568628);
+    padding: 15px;
+}
+
+.neighbours_section td
+{
+	padding: 10px;
+}
+
 #neighbours_progress_slider, #models_progress_slider
 {
 	width: 400px;
@@ -212,3 +224,35 @@ a.selected
 {
 	color: hsl(200, 80%, 53%);			
 }		
+
+#model_prediction_visualization table
+{
+    color: hsl(0, 0%, 42%);
+    font-size: 16px;	
+    margin-top: 25px;
+
+}
+
+#model_prediction_visualization .normal_cell
+{
+    height: 40px;	
+    width: 127;
+}
+
+#model_prediction_visualization .number_cell
+{
+    width: 25px;
+    font-weight: 600;
+    color: #0000004d;
+}
+
+#model_prediction_visualization .predictor_picture
+{
+	margin-left: 27;	
+}
+
+#model_prediction_visualization .predictor_name
+{
+	text-align: center;	
+    margin-bottom: 15px;	
+}

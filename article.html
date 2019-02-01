@@ -24,14 +24,26 @@
 
 <div id="main">
 
-<img class="avatar" src="avatar.PNG">
-<p class="name">Wessel Stoop</p>
+<div class="author_area">
+	<div class="author">
+		<img class="avatar" src="avatar.PNG">
+		<div class="name">Wessel Stoop</div>
+	</div>
+	<div class="author">
+		<img class="avatar" src="antal.png">
+		<div class="name">Antal van den Bosch</div>
+	</div>
+</div>
 
-<p class="lead">If you have ever typed something on a smartphone, you have used text prediction. In this article we will see how text predictors can work and how finding the best example language dataset is crucial for what kind of predictions come out. To see how this all works, we will try to predict tweets by four famous Twitter users.</p>
+<br>
+
+<p class="lead">If you have ever typed something on a smartphone, you have used text prediction. In this article we will see how text predictors can work and how finding the best example language dataset is crucial for what kind of predictions come out. To see how this all works, we will try to predict tweets by four famous Twitter users.</p
 
 <p><span id="first_character">T</span>o be able to make useful predictions, a text predictor needs as much knowledge about language as possible. Adding this knowledge by hand would be an enormous task, so this is often done by <em>machine learning</em>. These days, machine learning algorithms called <em>neural networks</em> are the best at text prediction, because of their remarkable ability to <a target="_blank" href="http://bionlp-www.utu.fi/wv_demo/">capture meaning in a list of numbers</a> and to learn about the <a target="_blank" href="https://chunml.github.io/ChunML.github.io/project/Creating-Text-Generator-Using-Recurrent-Neural-Network/">hierarchical levels of language</a> (from letters, to syllables, to words, phrases, sentences, etc). The downside, however, is that they can be pretty difficult to grasp - understanding why neural networks do the things they do is a <a target="_blank" href="https://distill.pub/2018/building-blocks/">whole research field on its own</a>. </p> 
 
-<p>Fortunately, there are surprisingly effective machine learning techniques that are much simpler, so we can have some insight in what is happening under the hood. For example, the algorithm <em>k Nearest Neighbours</em> works by looking at the last few words you wrote, comparing these to all groups of words seen during the training phase, and giving as the best guess what followed groups of similar words in the past. Let us see how that works for the tweets of 4 <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_most-followed_Twitter_accounts#Top_50_accounts">of the most followed Twitter users on Earth</a>. You can interact and play around with the results in the panel below:</p>
+<p>Fortunately, there are surprisingly effective machine learning techniques that are much simpler, so we can have some insight in what is happening under the hood. For example, the algorithm <em>k Nearest Neighbours</em> works by looking at the last few words you wrote, comparing these to all groups of words seen during the training phase, and giving as the best guess what followed groups of similar words in the past. Let us see how that works for the tweets of 4 <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_most-followed_Twitter_accounts#Top_50_accounts">of the most followed Twitter users on Earth</a>. 
+
+<p>You can interact and play around with the results in the panel below. After you have chosen a tweet, you can move the slider to various positions in the text, and it will automatically detect the last combination of three words, a so-called <em>trigram</em>. Next, it will try to find similar trigrams in its database of trigrams (which was created based on all tweets by this user) and display that along with the word that most often followed this trigram.</p>
 
 <div class="visualization" id="neighbours_vis">
 	<script src="js/neighbours_visualization.js" type="text/javascript"></script>
@@ -127,24 +139,24 @@
 		<p class="predicted_text">This is|</p>
 	</div>
 
-	<div class="visualization_section">
+	<div id="model_prediction_visualization" class="visualization_section">
 		<div class="section_title">
 			Best predictions by language models
 		</div>
 
 		<table>
 			<tr>
-				<td><img class="predictor_picture profile_picture" src="img/barackobama.jpg"></td><td><div class="predictor_name">@barackobama</div><div id="barackobama_predictions"></div></td>
+				<td class="number_cell"></td>
+				<td class="normal_cell"><img class="predictor_picture profile_picture" src="img/barackobama.jpg"><div class="predictor_name">@barackobama</div></td>
+				<td class="normal_cell"><img class="predictor_picture profile_picture" src="img/jtimberlake.jpg"><div class="predictor_name">@jtimberlake</div></td>
+				<td class="normal_cell"><img class="predictor_picture profile_picture" src="img/kimkardashian.jpg"><div class="predictor_name">@kimkardashian</div></td>
+				<td class="normal_cell"><img class="predictor_picture profile_picture" src="img/ladygaga.jpg"><div class="predictor_name">@ladygaga</div></td>
 			</tr>
-			<tr>
-				<td><img class="predictor_picture profile_picture" src="img/jtimberlake.jpg"></td><td><div class="predictor_name">@jtimberlake</div><div id="jtimberlake_predictions"></div></td>
-			</tr>
-			<tr>
-				<td><img class="predictor_picture profile_picture" src="img/kimkardashian.jpg"></td><td><div class="predictor_name">@kimkardashian</div><div id="kimkardashian_predictions"></div></td>
-			</tr>
-			<tr>
-				<td><img class="predictor_picture profile_picture" src="img/ladygaga.jpg"></td><td><div class="predictor_name">@ladygaga</div><div id="ladygaga_predictions"></div></td>
-			</tr>
+
+			<tr><td class="number_cell">1</td><td class="normal_cell" id="prediction_barackobama_1"></td><td class="normal_cell" id="prediction_jtimberlake_1"></td><td class="normal_cell" id="prediction_kimkardashian_1"></td><td class="normal_cell" id="prediction_ladygaga_1"></td></tr>
+			<tr><td class="number_cell">2</td><td class="normal_cell" id="prediction_barackobama_2"></td><td class="normal_cell" id="prediction_jtimberlake_2"></td><td class="normal_cell" id="prediction_kimkardashian_2"></td><td class="normal_cell" id="prediction_ladygaga_2"></td></tr>
+			<tr><td class="number_cell">3</td><td class="normal_cell" id="prediction_barackobama_3"></td><td class="normal_cell" id="prediction_jtimberlake_3"></td><td class="normal_cell" id="prediction_kimkardashian_3"></td><td class="normal_cell" id="prediction_ladygaga_3"></td></tr>
+
 		</table>
 	</div>
 </div>
@@ -414,7 +426,7 @@
 	</div>
 </div>
 
-<p>As you can see, the 'friend' models are ranked below the personal models in almost all cases. Part of this effect can of course be explained by overlapping topics; the models of Justin Timberlake and Lady Gaga are probably good at predicting each other's tweets because they are both tweeting about things like songs, concerts and fans. Something similar is probably happening with the predictions of @VP (Vice President) for the tweets of Obama: Obama only mentioned @VP when it was still being used by Joe Biden, but the tweets of current Vice President Mike Pence are still good predictors because of their political nature. Overlapping topics are not the whole story, though; research has shown that even if you take out all content words, leaving only words like 'the', 'but', 'and', 'is', etc, <a target="_blank" href="https://www.narcis.nl/publication/RecordID/oai%3Arepository.ubn.ru.nl%3A2066%2F155926/coll/person/id/5/Language/en">tweets by friends are still better predictors than tweets by random people</a>.</p>
+<p>As you can see, the 'friend' models are ranked directly below the personal models in almost all cases. Part of this effect can of course be explained by overlapping topics; the models of Justin Timberlake and Lady Gaga are probably good at predicting each other's tweets because they are both tweeting about things like songs, concerts and fans. Something similar is probably happening with the predictions of @VP (Vice President) for the tweets of Obama: Obama only mentioned @VP when it was still being used by Joe Biden, but the tweets of current Vice President Mike Pence are still good predictors because of their political nature. Overlapping topics are not the whole story, though; research has shown that even if you take out all content words, leaving only words like 'the', 'but', 'and', 'is', etc, <a target="_blank" href="https://www.narcis.nl/publication/RecordID/oai%3Arepository.ubn.ru.nl%3A2066%2F155926/coll/person/id/5/Language/en">tweets by friends are still better predictors than tweets by random people</a>.</p>
 
 <p>Note that this technique makes it possible to make predictions of what somebody wants to say even if we have no previous material of a particular person at all. This can for example be the case if somebody has word finding problems (aphasia) or cannot move his/her speech organs (for example because of paralysis): a word predictor can be of great help to such a person, and can be trained with the language of the persons around him/her. This idea is called 'language transplantation'.</p>
 

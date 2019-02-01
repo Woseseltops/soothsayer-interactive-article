@@ -59,13 +59,27 @@ h1
 	font-weight: 200;
 }
 
+.author_area
+{
+    width: 500px;
+    margin: auto;
+    margin-top: -55px;
+    display: flex;
+}
+
+.author
+{
+    width: 240px;
+    float: left;	
+}
+
 .name
 {
 	font-family: 'Montserrat';
-	text-align: center;
     font-weight: 700;
     font-size: 20px;
     color: rgb(39, 167, 231);	
+    text-align: center;
 }
 
 .origin
@@ -76,11 +90,10 @@ h1
 
 img.avatar
 {
-	margin: auto;
-    margin-top: -50px;
     position: relative;
     width: 100px;
-    display: block;
+    border-radius:50px;
+    left: 65px;    
 }
 
 @media only screen and (max-width: 500px)

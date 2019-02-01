@@ -29,7 +29,7 @@ class NeighboursVisualization
 
 	updateNeighbours()
 	{
-		var html = '<ul>';
+		var html = '<table>';
 		var current_neighbours = nearest_neighbours[this.selected_user][this.selected_tweet_index][this.progress];
 
 		for (var neighbour_index in current_neighbours)
@@ -38,10 +38,13 @@ class NeighboursVisualization
 			var word2 = current_neighbours[neighbour_index][0][1];
 			var word3 = current_neighbours[neighbour_index][0][2];
 			var prediction = current_neighbours[neighbour_index][1];
-			html += '<li><span class="lastwords">'+word1+' '+word2+' '+word3+'</span>: '+prediction+'</li>';
+
+			var neighbour_index_plus_one = parseInt(neighbour_index)+1;
+
+			html += '<tr><td class="number">'+neighbour_index_plus_one+'.</td><td><span class="lastwords">'+word1+' '+word2+' '+word3+'</span> &rarr; '+prediction+'</td></tr>';
 		}
 
-		html += '</ul>';
+		html += '</table>';
 
 		$('#neighbours_vis .neighbours_section').html(html);
 	}

@@ -30,7 +30,13 @@ class ModelsVisualization
 		{
 			var model = models[model_index]
 			var predictions = predictions_for_this_user[model][this.selected_tweet_index][this.progress-1];
-			$('#'+model+'_predictions').html(predictions.join(', '))
+
+			var maximum_prediction_length = 9;
+
+			$('#prediction_'+model+'_1').html(predictions[0].substring(0,maximum_prediction_length));
+			$('#prediction_'+model+'_2').html(predictions[1].substring(0,maximum_prediction_length));
+			$('#prediction_'+model+'_3').html(predictions[2].substring(0,maximum_prediction_length));
+
 		}
 	}
 
