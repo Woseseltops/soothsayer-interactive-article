@@ -33,9 +33,24 @@ class ModelsVisualization
 
 			var maximum_prediction_length = 9;
 
-			$('#prediction_'+model+'_1').html(predictions[0].substring(0,maximum_prediction_length));
-			$('#prediction_'+model+'_2').html(predictions[1].substring(0,maximum_prediction_length));
-			$('#prediction_'+model+'_3').html(predictions[2].substring(0,maximum_prediction_length));
+			if (predictions[0] != null)
+			{
+				predictions[0] = predictions[0].substring(0,maximum_prediction_length)				
+			}
+
+			if (predictions[1] != null)
+			{
+				predictions[1] = predictions[1].substring(0,maximum_prediction_length)				
+			}
+
+			if (predictions[2] != null)
+			{
+				predictions[2] = predictions[2].substring(0,maximum_prediction_length)				
+			}
+
+			$('#prediction_'+model+'_1').html(predictions[0]);
+			$('#prediction_'+model+'_2').html(predictions[1]);
+			$('#prediction_'+model+'_3').html(predictions[2]);
 
 		}
 	}
