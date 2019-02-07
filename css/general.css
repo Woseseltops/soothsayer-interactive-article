@@ -52,11 +52,14 @@ p
 
 h1
 {
-	width: 800px;
-	margin: auto;
-	font-size: 75px;
-	color: black;
-	font-weight: 200;
+    width: 1075px;
+    margin: auto;
+    padding-top: 65px;
+    padding-bottom: 40px;
+    font-size: 75px;
+    color: black;
+    font-weight: 200;
+    letter-spacing: 14px;
 }
 
 .author_area

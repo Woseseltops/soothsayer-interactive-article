@@ -43,7 +43,7 @@
 
 <p>Fortunately, there are surprisingly effective machine learning techniques that are much simpler, so we can have some insight in what is happening under the hood. For example, the algorithm <em>k Nearest Neighbours</em> works by looking at the last few words you wrote, comparing these to all groups of words seen during the training phase, and giving as the best guess what followed groups of similar words in the past. Let us see how that works for the tweets of 4 <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_most-followed_Twitter_accounts#Top_50_accounts">of the most followed Twitter users on Earth</a>. 
 
-<p>You can interact and play around with the results in the panel below. After you have chosen a tweet, you can move the slider to various positions in the text, and it will automatically detect the last combination of three words, a so-called <em>trigram</em>. Next, it will try to find similar trigrams in its database of trigrams (which was created based on all tweets by this user) and display that along with the word that most often followed this trigram.</p>
+<p>You can interact and play around with <em>k Nearest Neighbours</em> in the panel below. After you have chosen a tweet, you can move the slider to various positions in the text, and it will automatically detect the last combination of three words, a so-called <em>trigram</em>. Next, it will try to find similar trigrams in its database of trigrams (which was created based on all tweets by this user) and display that along with the word that most often followed this trigram.</p>
 
 <div class="visualization" id="neighbours_vis">
 	<script src="js/neighbours_visualization.js" type="text/javascript"></script>
@@ -98,8 +98,8 @@
 
 <p>This approach to text prediction is called <em>context sensitive</em>. A downside of this technique is that there often is no similar group of words available to make a prediction. To go from this to a text predictor that would be good enough to be used in practice, we need two more things:<p>
 <ul>
-<li>A list of words frequently used by the author (to be used as a backup).</li>
-<li>Limiting the pool of probable predictions based on what the user already typed so far: for example, it makes no sense to predict a word like 'the' if the user already started typing 'ca'.</li>
+<li>A list of words frequently used by the author, to be used as a backup.</li>
+<li>Limiting the pool of probable predictions based on what the user already typed so far. For example, it makes no sense to predict a word like 'the' if the user already started typing 'ca'.</li>
 </ul>
 
 <p>The resulting predictor is based on what you could call a very simple statistical language model. It is built entirely of example language data: if you put in different data, you get another model with other predictions. You can see that clearly if you let the models of our four celebrities predict each other's tweets:</p>
